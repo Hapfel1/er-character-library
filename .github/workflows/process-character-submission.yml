@@ -239,6 +239,37 @@ jobs:
             echo "✓ Copied preview screenshot"
           fi
       
+      - name: Update metadata.json with author and screenshots
+        run: |
+          char_id="${{ steps.gen_id.outputs.character_id }}"
+          author="${{ steps.issue_details.outputs.author }}"
+          
+          if [ -f "metadata/${char_id}.json" ]; then
+            # Update metadata with author and screenshot URLs
+            node <<'EOF'
+            const fs = require('fs');
+            const charId = '${{ steps.gen_id.outputs.character_id }}';
+            const author = '${{ steps.issue_details.outputs.author }}';
+            const baseUrl = 'https://raw.githubusercontent.com/${{ github.repository }}/main';
+            
+            const metadataPath = `metadata/${charId}.json`;
+            const metadata = JSON.parse(fs.readFileSync(metadataPath, 'utf8'));
+            
+            // Add author and screenshot URLs to metadata
+            metadata.author = author;
+            metadata.submitted_by = '${{ github.event.issue.user.login }}';
+            metadata.screenshots = {
+              face_url: `${baseUrl}/screenshots/face/${charId}.jpg`,
+              body_url: `${baseUrl}/screenshots/body/${charId}.jpg`,
+              preview_url: `${baseUrl}/screenshots/preview/${charId}.jpg`,
+              thumbnail_url: `${baseUrl}/screenshots/thumbs/${charId}.jpg`
+            };
+            
+            fs.writeFileSync(metadataPath, JSON.stringify(metadata, null, 2) + '\n');
+            console.log('Updated metadata.json with author and screenshot URLs');
+            EOF
+          fi
+      
       - name: Update index.json
         id: update_index
         uses: actions/github-script@v7
