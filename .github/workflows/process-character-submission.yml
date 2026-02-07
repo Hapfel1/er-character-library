@@ -267,7 +267,7 @@ jobs:
             
             fs.writeFileSync(metadataPath, JSON.stringify(metadata, null, 2) + '\n');
             console.log('Updated metadata.json with author and screenshot URLs');
-            EOF
+EOF
           fi
       
       - name: Update index.json
