@@ -262,7 +262,7 @@ jobs:
                   stats: metadata.stats || {},
                   ng_plus: metadata.ng_plus || 0,
                   playtime: metadata.playtime || 'Unknown',
-                  has_dlc: metadata.in_dlc_area || false,
+                  has_dlc: metadata.has_dlc || false,
                   equipment: Object.keys(metadata.equipment || {}).length || 0
                 };
               } catch (e) {
