@@ -1,13 +1,18 @@
 {
   "version": "1.0.0",
-  "last_updated": "2026-02-07T15:24:00.623Z",
+  "last_updated": "2026-02-07T21:55:23.665Z",
   "characters": [
     {
       "id": "character_001",
       "name": "IfLucadidthat",
       "author": "Hapfel",
       "description": "A Land of Reeds warrior using a katana and bow with Convergence mod setup",
-      "tags": ["warrior", "katana", "longbow", "convergence"],
+      "tags": [
+        "warrior",
+        "katana",
+        "longbow",
+        "convergence"
+      ],
       "erc_url": "characters/character_001.erc",
       "metadata_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/metadata/character_001.json",
       "screenshots": {
@@ -71,6 +76,108 @@
       "mod_info": {
         "name": "Convergence",
         "version": "1.2.3",
+        "required": true
+      }
+    },
+    {
+      "id": "character_002",
+      "name": "Convergence - Starcaller",
+      "author": "Hapfel",
+      "description": "Convergence Starcaller Character - EndGame",
+      "tags": [
+        "Convergence",
+        "EndGame",
+        "Starcaller"
+      ],
+      "erc_url": "characters/character_002.erc",
+      "metadata_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/metadata/character_002.json",
+      "screenshots": {
+        "face_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/face/character_002.jpg",
+        "body_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/body/character_002.jpg",
+        "preview_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/preview/character_002.jpg",
+        "thumbnail_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/thumbs/character_002.jpg"
+      },
+      "submitted_by": "Hapfel1",
+      "submitted_at": "2026-02-07T21:55:23.658Z",
+      "downloads": 0,
+      "likes": 0,
+      "level": 185,
+      "class": "Confessor",
+      "body_type": "Type A",
+      "stats": {
+        "vigor": 61,
+        "mind": 45,
+        "endurance": 40,
+        "strength": 15,
+        "dexterity": 15,
+        "intelligence": 70,
+        "faith": 9,
+        "arcane": 9
+      },
+      "ng_plus": 0,
+      "playtime": "34h 4m 30s",
+      "playtime_seconds": 122670,
+      "has_dlc": true,
+      "equipment": {
+        "right_hand_1": {
+          "id": 67530011,
+          "name": "Unknown Item (0x04066D1B)"
+        },
+        "right_hand_2": {
+          "id": 33250011,
+          "name": "Unknown Item (0x01FB5ADB)"
+        },
+        "right_hand_3": {
+          "id": 67500612,
+          "name": "Unknown Item (0x0405FA44)"
+        },
+        "left_hand_1": {
+          "id": 67530013,
+          "name": "Unknown Item (0x04066D1D)"
+        },
+        "left_hand_2": {
+          "id": 30110000,
+          "name": "Rift Shield"
+        },
+        "head": {
+          "id": 1902000,
+          "name": "Glintstone Scarab"
+        },
+        "chest": {
+          "id": 293100,
+          "name": "Night Maiden Armor"
+        },
+        "arms": {
+          "id": 293200,
+          "name": "Unknown Item (0x10047950)"
+        },
+        "legs": {
+          "id": 293300,
+          "name": "Unknown Item (0x100479B4)"
+        },
+        "talismans": [
+          {
+            "id": 7030,
+            "name": "Two-Headed Turtle Talisman"
+          },
+          {
+            "id": 3030,
+            "name": "Unknown Item (0x20000BD6)"
+          },
+          {
+            "id": 8040,
+            "name": "Two-Handed Sword Talisman"
+          },
+          {
+            "id": 1230,
+            "name": "Warrior Jar Shard"
+          }
+        ]
+      },
+      "requires_mod": true,
+      "mod_info": {
+        "name": "Convergence",
+        "version": "2.2.3A",
         "required": true
       }
     }
