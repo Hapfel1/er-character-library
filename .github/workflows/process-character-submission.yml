@@ -182,18 +182,21 @@ jobs:
       - name: Generate character ID
         id: gen_id
         run: |
-          # Count existing character files to generate next ID
+          # Find the highest existing character ID number
+          max_id=0
           if [ -d "characters" ]; then
-            count=$(find characters -name "character_*.erc" | wc -l)
-          else
-            count=0
+            # Extract numbers from existing character files and find the max
+            max_id=$(find characters -name "character_*.erc" -type f | grep -oP 'character_\K[0-9]+' | sort -n | tail -1)
+            if [ -z "$max_id" ]; then
+              max_id=0
+            fi
           fi
           
-          next_id=$((count + 1))
+          next_id=$((max_id + 1))
           char_id=$(printf "character_%03d" $next_id)
           
           echo "character_id=$char_id" >> $GITHUB_OUTPUT
-          echo "Generated character ID: $char_id"
+          echo "Generated character ID: $char_id (max was $max_id)"
       
       - name: Validate and move files
         run: |
