@@ -1,89 +1,67 @@
 {
-  "name": "LeMage",
-  "level": 185,
-  "class": "Confessor",
+  "name": "hapfel\u0000:3",
+  "level": 90,
+  "class": "Samurai",
   "body_type": "Type A",
   "stats": {
-    "vigor": 61,
-    "mind": 45,
-    "endurance": 40,
-    "strength": 15,
-    "dexterity": 15,
-    "intelligence": 70,
-    "faith": 9,
+    "vigor": 44,
+    "mind": 18,
+    "endurance": 20,
+    "strength": 12,
+    "dexterity": 24,
+    "intelligence": 9,
+    "faith": 33,
     "arcane": 9
   },
-  "runes": 217601,
-  "playtime_seconds": 122670,
-  "playtime": "34h 4m 30s",
+  "runes": 0,
+  "playtime_seconds": 50252,
+  "playtime": "13h 57m 32s",
   "ng_plus": 0,
   "equipment": {
     "right_hand_1": {
-      "id": 67530011,
-      "name": "Unknown Item (0x04066D1B)"
-    },
-    "right_hand_2": {
-      "id": 33250011,
-      "name": "Unknown Item (0x01FB5ADB)"
-    },
-    "right_hand_3": {
-      "id": 67500612,
-      "name": "Unknown Item (0x0405FA44)"
+      "id": 17050009,
+      "name": "Vyke's War Spear"
     },
     "left_hand_1": {
-      "id": 67530013,
-      "name": "Unknown Item (0x04066D1D)"
+      "id": 34090004,
+      "name": "Frenzied Flame Seal"
     },
     "left_hand_2": {
-      "id": 30110000,
-      "name": "Rift Shield"
+      "id": 31300000,
+      "name": "Blue Crest Heater Shield"
     },
     "head": {
-      "id": 1902000,
-      "name": "Glintstone Scarab"
+      "id": 10000,
+      "name": ""
     },
     "chest": {
-      "id": 293100,
-      "name": "Night Maiden Armor"
+      "id": 950100,
+      "name": "Fingerprint Armor"
     },
     "arms": {
-      "id": 293200,
-      "name": "Unknown Item (0x10047950)"
+      "id": 950200,
+      "name": "Fingerprint Gauntlets"
     },
     "legs": {
-      "id": 293300,
-      "name": "Unknown Item (0x100479B4)"
+      "id": 950300,
+      "name": "Fingerprint Greaves"
     },
     "talismans": [
       {
-        "id": 7030,
-        "name": "Two-Headed Turtle Talisman"
+        "id": 1051,
+        "name": "Radagon's Soreseal"
       },
       {
-        "id": 3030,
-        "name": "Unknown Item (0x20000BD6)"
+        "id": 2180,
+        "name": "Claw Talisman"
       },
       {
-        "id": 8040,
-        "name": "Two-Handed Sword Talisman"
-      },
-      {
-        "id": 1230,
-        "name": "Warrior Jar Shard"
+        "id": 1021,
+        "name": "Viridian Amber Medallion +1"
       }
     ]
   },
   "has_dlc": true,
-  "overhaul_mod": {
-    "name": "Convergence",
-    "version": "2.2.3A"
-  },
-  "requires_mod": true,
-  "mod_info": {
-    "name": "Convergence",
-    "version": "2.2.3A",
-    "required": true
-  },
   "author": "Hapfel",
   "submitted_by": "Hapfel1",
   "screenshots": {
