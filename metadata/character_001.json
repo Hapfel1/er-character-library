@@ -1,5 +1,6 @@
 {
   "name": "IfLucadidthat",
+  "author": "Hapfel",
   "level": 18,
   "class": "Prisoner",
   "body_type": "Type B",
@@ -48,6 +49,12 @@
     }
   },
   "has_dlc": true,
+  "screenshots": {
+    "face_url": "https://raw.githubusercontent.com/quird/er-character-library/main/screenshots/face/character_001.jpg",
+    "body_url": "https://raw.githubusercontent.com/quird/er-character-library/main/screenshots/body/character_001.jpg",
+    "preview_url": "https://raw.githubusercontent.com/quird/er-character-library/main/screenshots/preview/character_001.jpg",
+    "thumbnail_url": "https://raw.githubusercontent.com/quird/er-character-library/main/screenshots/thumbs/character_001.jpg"
+  },
   "overhaul_mod": {
     "name": "Convergence",
     "version": "1.2.3"
