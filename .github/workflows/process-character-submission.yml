@@ -315,39 +315,36 @@ jobs:
             const prNumber = ${{ steps.cpr.outputs.pull-request-number }};
             const charId = '${{ steps.gen_id.outputs.character_id }}';
             
-            const comment = `✅ **Submission Processed!**
-
-            Your character has been added to the library!
-
-            **Character ID:** \`${charId}\`
-            **Pull Request:** #${prNumber}
-
-            The character is now available in the library. Thank you for sharing!`;
-                        
-                        await github.rest.issues.createComment({
-                          owner: context.repo.owner,
-                          repo: context.repo.repo,
-                          issue_number: issueNumber,
-                          body: comment
-                        });
-                  
-                  - name: Auto-merge for admins
-                    if: steps.cpr.outputs.pull-request-number != '' && github.event.issue.user.login == 'Hapfel1'
-                    uses: actions/github-script@v7
-                    with:
-                      github-token: ${{ secrets.GITHUB_TOKEN }}
-                      script: |
-                        const prNumber = ${{ steps.cpr.outputs.pull-request-number }};
-                        
-                        try {
-                          await github.rest.pulls.merge({
-                            owner: context.repo.owner,
-                            repo: context.repo.repo,
-                            pull_number: prNumber,
-                            merge_method: 'squash',
-                            commit_title: 'Add character ${{ steps.gen_id.outputs.character_id }}'
-                          });
-                          console.log('PR auto-merged');
-                        } catch (error) {
-                          console.log('Could not auto-merge:', error.message);
-                        }
+            const comment = '✅ **Submission Processed!**\n\n' +
+              'Your character has been added to the library!\n\n' +
+              '**Character ID:** `' + charId + '`\n' +
+              '**Pull Request:** #' + prNumber + '\n\n' +
+              'The character is now available in the library. Thank you for sharing!';
+            
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber,
+              body: comment
+            });
+      
+      - name: Auto-merge for admins
+        if: steps.cpr.outputs.pull-request-number != '' && github.event.issue.user.login == 'Hapfel1'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const prNumber = ${{ steps.cpr.outputs.pull-request-number }};
+            
+            try {
+              await github.rest.pulls.merge({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: prNumber,
+                merge_method: 'squash',
+                commit_title: 'Add character ${{ steps.gen_id.outputs.character_id }}'
+              });
+              console.log('PR auto-merged');
+            } catch (error) {
+              console.log('Could not auto-merge:', error.message);
+            }

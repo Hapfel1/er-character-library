@@ -100,68 +100,68 @@ jobs:
               issue_number: context.issue.number,
               state: 'closed'
             });
-                  
-                  - name: Check submission format
-                    if: steps.is_submission.outputs.is_submission == 'true' && steps.check_zip.outputs.has_zip == 'true'
-                    id: check_format
-                    uses: actions/github-script@v7
-                    with:
-                      github-token: ${{ secrets.GITHUB_TOKEN }}
-                      script: |
-                        const issue = context.payload.issue;
-                        const body = issue.body;
-                        const title = issue.title;
-                        
-                        const errors = [];
-                        const warnings = [];
-                        
-                        // Check title format
-                        if (!title.includes('[Character Submission]')) {
-                          errors.push('Title must include [Character Submission]');
-                        }
-                        
-                        // Check for required sections
-                        const requiredSections = [
-                          'Character Name',
-                          'Author',
-                          'Tags',
-                          'Stats',
-                          'Description'
-                        ];
-                        
-                        for (const section of requiredSections) {
-                          if (!body.includes(`**${section}`)) {
-                            errors.push(`Missing required section: "**${section}:**"`);
-                          }
-                        }
-                        
-                        // Check for screenshots mentions
-                        const hasFaceScreenshot = /face|screenshot|image/i.test(body);
-                        const hasBodyScreenshot = /body|screenshot|image/i.test(body);
-                        if (!hasFaceScreenshot || !hasBodyScreenshot) {
-                          warnings.push('Screenshots (face and body) are required for proper submission');
-                        }
-                        
-                        // Check metadata block
-                        if (!body.includes('metadata.json')) {
-                          warnings.push('metadata.json should be included in the package');
-                        }
-                        
-                        core.setOutput('has_errors', errors.length > 0);
-                        core.setOutput('has_warnings', warnings.length > 0);
-                        
-                        if (errors.length > 0) {
-                          console.log('❌ Validation Errors:');
-                          errors.forEach(e => console.log('  - ' + e));
-                        }
-                        
-                        if (warnings.length > 0) {
-                          console.log('⚠️  Warnings:');
-                          warnings.forEach(w => console.log('  - ' + w));
-                        }
-                        
-                        core.setOutput('errors', errors.join('\n'));
-                        core.setOutput('warnings', warnings.join('\n'));
+      
+      - name: Check submission format
+        if: steps.is_submission.outputs.is_submission == 'true' && steps.check_zip.outputs.has_zip == 'true'
+        id: check_format
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const issue = context.payload.issue;
+            const body = issue.body;
+            const title = issue.title;
+            
+            const errors = [];
+            const warnings = [];
+            
+            // Check title format
+            if (!title.includes('[Character Submission]')) {
+              errors.push('Title must include [Character Submission]');
+            }
+            
+            // Check for required sections
+            const requiredSections = [
+              'Character Name',
+              'Author',
+              'Tags',
+              'Stats',
+              'Description'
+            ];
+            
+            for (const section of requiredSections) {
+              if (!body.includes(`**${section}`)) {
+                errors.push(`Missing required section: "**${section}:**"`);
+              }
+            }
+            
+            // Check for screenshots mentions
+            const hasFaceScreenshot = /face|screenshot|image/i.test(body);
+            const hasBodyScreenshot = /body|screenshot|image/i.test(body);
+            if (!hasFaceScreenshot || !hasBodyScreenshot) {
+              warnings.push('Screenshots (face and body) are required for proper submission');
+            }
+            
+            // Check metadata block
+            if (!body.includes('metadata.json')) {
+              warnings.push('metadata.json should be included in the package');
+            }
+            
+            core.setOutput('has_errors', errors.length > 0);
+            core.setOutput('has_warnings', warnings.length > 0);
+            
+            if (errors.length > 0) {
+              console.log('❌ Validation Errors:');
+              errors.forEach(e => console.log('  - ' + e));
+            }
+            
+            if (warnings.length > 0) {
+              console.log('⚠️  Warnings:');
+              warnings.forEach(w => console.log('  - ' + w));
+            }
+            
+            core.setOutput('errors', errors.join('\n'));
+            core.setOutput('warnings', warnings.join('\n'));
       
       - name: Comment validation results
         if: steps.is_submission.outputs.is_submission == 'true' && steps.check_zip.outputs.has_zip == 'true'
