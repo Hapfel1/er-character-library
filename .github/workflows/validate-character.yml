@@ -48,7 +48,7 @@ jobs:
             
             // Look for actual ZIP URL in issue body
             let hasZipUrl = false;
-            const zipUrlPattern = /https:\/\/github\.com\/.+?\/files\/[\w\/]+\.zip/;
+            const zipUrlPattern = /https:\/\/github\.com\/[^)\s]+\.zip(?:\?[^)\s]+)?/;
             
             if (zipUrlPattern.test(issue.body)) {
               hasZipUrl = true;

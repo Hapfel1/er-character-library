@@ -76,7 +76,7 @@ jobs:
             // Search comments for attachment
             for (const comment of comments.data) {
               // GitHub puts attachment URLs like: https://github.com/user/repo/files/...
-              const urlMatch = comment.body.match(/https:\/\/github\.com\/.+?\/files\/[\w\/]+\.zip/);
+              const urlMatch = comment.body.match(/https:\/\/github\.com\/[^)\s]+\.zip(?:\?[^)\s]+)?/);
               if (urlMatch) {
                 downloadUrl = urlMatch[0];
                 break;
@@ -85,7 +85,7 @@ jobs:
             
             // Also check issue body for attachment
             if (!downloadUrl) {
-              const bodyMatch = issue.body.match(/https:\/\/github\.com\/.+?\/files\/[\w\/]+\.zip/);
+              const bodyMatch = issue.body.match(/https:\/\/github\.com\/[^)\s]+\.zip(?:\?[^)\s]+)?/);
               if (bodyMatch) {
                 downloadUrl = bodyMatch[0];
               }
