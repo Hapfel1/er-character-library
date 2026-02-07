@@ -1,5 +1,30 @@
 {
   "version": "1.0.0",
-  "last_updated": "2026-02-06T00:00:00Z",
-  "characters": []
+  "last_updated": "2026-02-07T15:24:00.623Z",
+  "characters": [
+    {
+      "id": "character_001",
+      "name": "Hapfel",
+      "submitted_by": "github-actions",
+      "submitted_at": "2026-02-07T15:24:00.622Z",
+      "downloads": 0,
+      "likes": 0,
+      "level": 18,
+      "class": "Prisoner",
+      "stats": {
+        "vigor": 17,
+        "mind": 11,
+        "endurance": 13,
+        "strength": 12,
+        "dexterity": 15,
+        "intelligence": 9,
+        "faith": 8,
+        "arcane": 12
+      },
+      "ng_plus": 0,
+      "playtime": "0h 7m 29s",
+      "has_dlc": true,
+      "equipment": 7
+    }
+  ]
 }

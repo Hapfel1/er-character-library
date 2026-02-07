@@ -1,0 +1,61 @@
+{
+  "name": "IfLucadidthat",
+  "level": 18,
+  "class": "Prisoner",
+  "body_type": "Type B",
+  "stats": {
+    "vigor": 17,
+    "mind": 11,
+    "endurance": 13,
+    "strength": 12,
+    "dexterity": 15,
+    "intelligence": 9,
+    "faith": 8,
+    "arcane": 12
+  },
+  "runes": 0,
+  "playtime_seconds": 449,
+  "playtime": "0h 7m 29s",
+  "ng_plus": 0,
+  "equipment": {
+    "right_hand_1": {
+      "id": 9000000,
+      "name": "Uchigatana"
+    },
+    "left_hand_1": {
+      "id": 41000000,
+      "name": "Longbow"
+    },
+    "left_hand_2": {
+      "id": 30070000,
+      "name": "Red Thorn Roundshield"
+    },
+    "head": {
+      "id": 870000,
+      "name": "Land of Reeds Helm"
+    },
+    "chest": {
+      "id": 871100,
+      "name": "Land of Reeds Armor (Altered)"
+    },
+    "arms": {
+      "id": 870200,
+      "name": "Land of Reeds Gauntlets"
+    },
+    "legs": {
+      "id": 870300,
+      "name": "Land of Reeds Greaves"
+    }
+  },
+  "has_dlc": true,
+  "overhaul_mod": {
+    "name": "Convergence",
+    "version": "1.2.3"
+  },
+  "requires_mod": true,
+  "mod_info": {
+    "name": "Convergence",
+    "version": "1.2.3",
+    "required": true
+  }
+}
