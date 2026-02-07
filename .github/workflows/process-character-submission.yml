@@ -164,8 +164,8 @@ jobs:
           mkdir -p character_package
           cd character_package
           
-          # Extract ZIP
-          unzip -q ../character.zip
+          # Extract ZIP (overwrite if re-run)
+          unzip -oq ../character.zip
           
           # List extracted files
           echo "Extracted files:"
