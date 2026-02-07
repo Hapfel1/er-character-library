@@ -1,0 +1,66 @@
+name: Publish Character
+
+on:
+  workflow_dispatch:
+    inputs:
+      issue_number:
+        description: 'Issue number to publish'
+        required: true
+        type: number
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Download character from issue
+        run: |
+          # Get issue body
+          ISSUE_BODY=$(gh issue view ${{ inputs.issue_number }} --json body -q .body)
+          
+          # Extract ZIP URL
+          ZIP_URL=$(echo "$ISSUE_BODY" | grep -oP 'https://github\.com/.+?\.zip' | head -1)
+          
+          # Download and extract
+          wget "$ZIP_URL" -O submission.zip
+          unzip submission.zip -d submission/
+          
+      - name: Process character files
+        run: |
+          # Generate character ID from filename
+          ERC_FILE=$(ls submission/*.erc)
+          CHAR_ID=$(basename "$ERC_FILE" .erc)
+          
+          # Move files to appropriate directories
+          mv submission/*.erc characters/
+          mv submission/metadata.json "metadata/${CHAR_ID}.json"
+          
+          # Move screenshots if they exist
+          [ -f submission/face.png ] && mv submission/face.png "screenshots/face/${CHAR_ID}.png"
+          [ -f submission/body.png ] && mv submission/body.png "screenshots/body/${CHAR_ID}.png"
+          [ -f submission/preview.png ] && mv submission/preview.png "screenshots/preview/${CHAR_ID}.png"
+          [ -f submission/thumbnail.png ] && mv submission/thumbnail.png "thumbnails/${CHAR_ID}.png"
+          
+      - name: Update index.json
+        run: |
+          # This would be a Python script in practice
+          # For now, manual update required
+          echo "Remember to update index.json manually"
+          
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "Add character from issue #${{ inputs.issue_number }}"
+          git push
+          
+      - name: Close issue
+        run: |
+          gh issue close ${{ inputs.issue_number }} --comment "✅ Character published! Thank you for your contribution."
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

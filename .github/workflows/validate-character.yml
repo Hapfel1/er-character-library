@@ -1,0 +1,60 @@
+name: Validate Character Submission
+
+on:
+  issues:
+    types: [opened, edited]
+
+jobs:
+  validate:
+    if: contains(github.event.issue.labels.*.name, 'character-submission')
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Download submission ZIP
+        id: download
+        run: |
+          # Extract ZIP URL from issue body
+          ZIP_URL=$(echo "${{ github.event.issue.body }}" | grep -oP 'https://github\.com/.+?\.zip' | head -1)
+          
+          if [ -z "$ZIP_URL" ]; then
+            echo "❌ No ZIP file found in issue" >> $GITHUB_STEP_SUMMARY
+            exit 1
+          fi
+          
+          wget "$ZIP_URL" -O submission.zip
+          unzip submission.zip -d submission/
+          
+      - name: Validate files
+        run: |
+          # Check required files exist
+          if [ ! -f submission/*.erc ]; then
+            echo "❌ Missing .erc file" >> $GITHUB_STEP_SUMMARY
+            exit 1
+          fi
+          
+          if [ ! -f submission/metadata.json ]; then
+            echo "❌ Missing metadata.json" >> $GITHUB_STEP_SUMMARY
+            exit 1
+          fi
+          
+          # Check file sizes
+          ERC_SIZE=$(stat -f%z submission/*.erc 2>/dev/null || stat -c%s submission/*.erc)
+          if [ "$ERC_SIZE" -gt 5000000 ]; then
+            echo "❌ .erc file too large (max 5MB)" >> $GITHUB_STEP_SUMMARY
+            exit 1
+          fi
+          
+          echo "✅ All validation checks passed" >> $GITHUB_STEP_SUMMARY
+          
+      - name: Comment on issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '✅ **Validation passed!** This character submission is ready for review.\n\nA maintainer will review and merge it soon.'
+            })
