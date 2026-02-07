@@ -186,10 +186,14 @@ jobs:
           max_id=0
           if [ -d "characters" ]; then
             # Extract numbers from existing character files and find the max
-            max_id=$(find characters -name "character_*.erc" -type f | grep -oP 'character_\K[0-9]+' | sort -n | tail -1)
-            if [ -z "$max_id" ]; then
-              max_id=0
-            fi
+            for file in characters/character_*.erc; do
+              if [ -f "$file" ]; then
+                num=$(basename "$file" | sed 's/character_\([0-9]*\)\.erc/\1/')
+                if [ "$num" -gt "$max_id" ]; then
+                  max_id=$num
+                fi
+              fi
+            done
           fi
           
           next_id=$((max_id + 1))
