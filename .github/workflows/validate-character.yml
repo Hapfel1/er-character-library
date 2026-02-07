@@ -5,84 +5,205 @@ on:
     types: [opened, edited]
 
 jobs:
-  validate:
+  validate-submission:
     runs-on: ubuntu-latest
+    
     permissions:
       issues: write
+      contents: read
     
     steps:
-      - uses: actions/checkout@v4
+      - name: Check if submission
+        id: is_submission
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const title = context.payload.issue.title;
+            const isSubmission = title.includes('[Character Submission]');
+            core.setOutput('is_submission', isSubmission ? 'true' : 'false');
+            console.log('Is character submission:', isSubmission);
       
-      - name: Ensure label for submissions
-        id: label_check
+      - name: Add character-submission label
+        if: steps.is_submission.outputs.is_submission == 'true'
         uses: actions/github-script@v7
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const labels = (context.payload.issue.labels || []).map(l => l.name);
-            const hasLabel = labels.includes('character-submission');
-            if (!hasLabel && context.payload.issue.title.startsWith('[Character Submission]')) {
-              await github.rest.issues.addLabels({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: context.issue.number,
-                labels: ['character-submission']
-              });
-              core.setOutput('has_label', 'true');
-              return;
-            }
-            core.setOutput('has_label', hasLabel ? 'true' : 'false');
-
-      - name: Skip non-submission issues
-        if: steps.label_check.outputs.has_label != 'true'
-        run: |
-          echo "No submission label found. Skipping validation." >> $GITHUB_STEP_SUMMARY
-
-      - name: Download submission ZIP
-        if: steps.label_check.outputs.has_label == 'true'
-        id: download
-        run: |
-          # Extract ZIP URL from issue body
-          ZIP_URL=$(echo "${{ github.event.issue.body }}" | grep -oP 'https://github\.com/.+?\.zip' | head -1)
-          
-          if [ -z "$ZIP_URL" ]; then
-            echo "❌ No ZIP file found in issue" >> $GITHUB_STEP_SUMMARY
-            exit 1
-          fi
-          
-          wget "$ZIP_URL" -O submission.zip
-          unzip submission.zip -d submission/
-          
-      - name: Validate files
-        if: steps.label_check.outputs.has_label == 'true'
-        run: |
-          # Check required files exist
-          if [ ! -f submission/*.erc ]; then
-            echo "❌ Missing .erc file" >> $GITHUB_STEP_SUMMARY
-            exit 1
-          fi
-          
-          if [ ! -f submission/metadata.json ]; then
-            echo "❌ Missing metadata.json" >> $GITHUB_STEP_SUMMARY
-            exit 1
-          fi
-          
-          # Check file sizes
-          ERC_SIZE=$(stat -f%z submission/*.erc 2>/dev/null || stat -c%s submission/*.erc)
-          if [ "$ERC_SIZE" -gt 5000000 ]; then
-            echo "❌ .erc file too large (max 5MB)" >> $GITHUB_STEP_SUMMARY
-            exit 1
-          fi
-          
-          echo "✅ All validation checks passed" >> $GITHUB_STEP_SUMMARY
-          
-      - name: Comment on issue
-        if: steps.label_check.outputs.has_label == 'true'
-        uses: actions/github-script@v7
-        with:
-          script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
+            github.rest.issues.addLabels({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: '✅ **Validation passed!** This character submission is ready for review.\n\nA maintainer will review and merge it soon.'
-            })
+              issue_number: context.issue.number,
+              labels: ['character-submission']
+            });
+      
+      - name: Check submission format
+        if: steps.is_submission.outputs.is_submission == 'true'
+        id: check_format
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const issue = context.payload.issue;
+            const body = issue.body;
+            const title = issue.title;
+            
+            const errors = [];
+            const warnings = [];
+            
+            // Check title format
+            if (!title.includes('[Character Submission]')) {
+              errors.push('Title must include [Character Submission]');
+            }
+            
+            // Check for required sections
+            const requiredSections = [
+              'Character Name',
+              'Author',
+              'Tags',
+              'Stats',
+              'Description'
+            ];
+            
+            for (const section of requiredSections) {
+              if (!body.includes(`**${section}`)) {
+                errors.push(`Missing required section: "**${section}:**"`);
+              }
+            }
+            
+            // Check for ZIP file attachment mentions
+            const hasZip = /\.(zip|ZIP)|Attached|attachment|package/i.test(body);
+            if (!hasZip) {
+              errors.push('No character package mentioned - must attach {name}_package.zip');
+            }
+            
+            // Check for screenshots mentions
+            const hasFaceScreenshot = /face|screenshot|image/i.test(body);
+            const hasBodyScreenshot = /body|screenshot|image/i.test(body);
+            if (!hasFaceScreenshot || !hasBodyScreenshot) {
+              warnings.push('Screenshots (face and body) are required for proper submission');
+            }
+            
+            // Check metadata block
+            if (!body.includes('metadata.json')) {
+              warnings.push('metadata.json should be included in the package');
+            }
+            
+            core.setOutput('has_errors', errors.length > 0);
+            core.setOutput('has_warnings', warnings.length > 0);
+            
+            if (errors.length > 0) {
+              console.log('❌ Validation Errors:');
+              errors.forEach(e => console.log('  - ' + e));
+            }
+            
+            if (warnings.length > 0) {
+              console.log('⚠️  Warnings:');
+              warnings.forEach(w => console.log('  - ' + w));
+            }
+            
+            core.setOutput('errors', errors.join('\n'));
+            core.setOutput('warnings', warnings.join('\n'));
+      
+      - name: Comment validation results
+        if: steps.is_submission.outputs.is_submission == 'true'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const hasErrors = '${{ steps.check_format.outputs.has_errors }}' === 'true';
+            const hasWarnings = '${{ steps.check_format.outputs.has_warnings }}' === 'true';
+            const errors = '${{ steps.check_format.outputs.errors }}';
+            const warnings = '${{ steps.check_format.outputs.warnings }}';
+            
+            let comment = '';
+            
+            if (!hasErrors && !hasWarnings) {
+              comment = `✅ **Submission Validated**
+
+            Your character submission looks good! 
+
+            **Next steps for maintainers:**
+            1. Download and test the character package
+            2. Verify character imports correctly
+            3. Check mod compatibility notes
+            4. Add "approved" label when ready to publish
+
+            Thank you for sharing your build!`;
+                          
+                          // Add validation success label
+                          github.rest.issues.addLabels({
+                            owner: context.repo.owner,
+                            repo: context.repo.repo,
+                            issue_number: context.issue.number,
+                            labels: ['validated']
+                          });
+                        } else {
+                          comment = `⚠️ **Submission Needs Attention**
+
+            Your submission has some issues to address:`;
+                          
+                          if (hasErrors) {
+                            comment += `\n\n**❌ Errors (must fix):**\n${errors
+                              .split('\n')
+                              .filter(e => e)
+                              .map(e => '- ' + e)
+                              .join('\n')}`;
+                          }
+                          
+                          if (hasWarnings) {
+                            comment += `\n\n**⚠️  Warnings (recommended):**\n${warnings
+                              .split('\n')
+                              .filter(w => w)
+                              .map(w => '- ' + w)
+                              .join('\n')}`;
+                          }
+                          
+                          comment += `\n\n**How to fix:**
+            1. Review the issues above
+            2. Edit this issue with the corrections
+            3. Make sure your ZIP attachment is present
+            4. Validation will re-run automatically`;
+                          
+                          // Add needs-attention label for errors
+                          if (hasErrors) {
+                            github.rest.issues.addLabels({
+                              owner: context.repo.owner,
+                              repo: context.repo.repo,
+                              issue_number: context.issue.number,
+                              labels: ['needs-attention']
+                            });
+                          }
+                        }
+                        
+                        // Delete any previous validation comments
+                        const comments = await github.rest.issues.listComments({
+                          owner: context.repo.owner,
+                          repo: context.repo.repo,
+                          issue_number: context.issue.number
+                        });
+                        
+                        for (const c of comments.data) {
+                          if (c.user.type === 'Bot' && (
+                            c.body.includes('Submission Validated') || 
+                            c.body.includes('Submission Needs Attention')
+                          )) {
+                            try {
+                              await github.rest.issues.deleteComment({
+                                owner: context.repo.owner,
+                                repo: context.repo.repo,
+                                comment_id: c.id
+                              });
+                            } catch (e) {
+                              console.log('Could not delete old comment');
+                            }
+                          }
+                        }
+                        
+                        // Create validation comment
+                        await github.rest.issues.createComment({
+                          owner: context.repo.owner,
+                          repo: context.repo.repo,
+                          issue_number: context.issue.number,
+                          body: comment
+                        });

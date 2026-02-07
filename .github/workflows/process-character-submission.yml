@@ -1,0 +1,298 @@
+name: Process Character Submission
+
+on:
+  issues:
+    types: [labeled]
+
+jobs:
+  process-submission:
+    if: contains(github.event.issue.labels.*.name, 'approved')
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Fetch issue details
+        id: issue_details
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const issue = context.payload.issue;
+            console.log('Issue title:', issue.title);
+            console.log('Labels:', issue.labels.map(l => l.name));
+            
+            // Extract character name from title
+            const match = issue.title.match(/\[Character Submission\]\s*(.+)/);
+            const charName = match ? match[1].trim() : 'unknown';
+            
+            core.setOutput('char_name', charName);
+            core.setOutput('issue_number', issue.number);
+      
+      - name: Get ZIP attachment URL
+        id: find_zip
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const issue = context.payload.issue;
+            
+            // Look for attachment URL in issue comments
+            const comments = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issue.number
+            });
+            
+            let downloadUrl = null;
+            
+            // Search comments for attachment
+            for (const comment of comments.data) {
+              // GitHub puts attachment URLs like: https://github.com/user/repo/files/...
+              const urlMatch = comment.body.match(/https:\/\/github\.com\/.+?\/files\/[\w\/]+\.zip/);
+              if (urlMatch) {
+                downloadUrl = urlMatch[0];
+                break;
+              }
+            }
+            
+            // Also check issue body for attachment
+            if (!downloadUrl) {
+              const bodyMatch = issue.body.match(/https:\/\/github\.com\/.+?\/files\/[\w\/]+\.zip/);
+              if (bodyMatch) {
+                downloadUrl = bodyMatch[0];
+              }
+            }
+            
+            if (!downloadUrl) {
+              core.setFailed('No ZIP attachment found in issue. User must attach the character package ZIP.');
+              return;
+            }
+            
+            core.setOutput('zip_url', downloadUrl);
+            console.log('Found ZIP attachment:', downloadUrl);
+      
+      - name: Download and extract ZIP
+        id: extract
+        run: |
+          # Download the ZIP
+          curl -L "${{ steps.find_zip.outputs.zip_url }}" -o character.zip
+          
+          # Create extraction directory
+          mkdir -p character_package
+          cd character_package
+          
+          # Extract ZIP
+          unzip -q ../character.zip
+          
+          # List extracted files
+          echo "Extracted files:"
+          find . -type f
+          
+          # Find the .erc file
+          ERC_FILE=$(find . -name "*.erc" -type f | head -1)
+          if [ -z "$ERC_FILE" ]; then
+            echo "ERROR: No .erc file found in ZIP"
+            exit 1
+          fi
+          echo "erc_file=$ERC_FILE" >> $GITHUB_ENV
+      
+      - name: Generate character ID
+        id: gen_id
+        run: |
+          # Count existing character files to generate next ID
+          if [ -d "characters" ]; then
+            count=$(find characters -name "character_*.erc" | wc -l)
+          else
+            count=0
+          fi
+          
+          next_id=$((count + 1))
+          char_id=$(printf "character_%03d" $next_id)
+          
+          echo "character_id=$char_id" >> $GITHUB_OUTPUT
+          echo "Generated character ID: $char_id"
+      
+      - name: Validate and move files
+        run: |
+          char_id="${{ steps.gen_id.outputs.character_id }}"
+          
+          # Create directories
+          mkdir -p characters metadata screenshots/face screenshots/body screenshots/preview thumbnails
+          
+          # Move .erc file
+          ERC_SOURCE=$(find character_package -name "*.erc" -type f | head -1)
+          if [ ! -f "$ERC_SOURCE" ]; then
+            echo "ERROR: .erc file not found"
+            exit 1
+          fi
+          cp "$ERC_SOURCE" "characters/${char_id}.erc"
+          echo "✓ Copied .erc file"
+          
+          # Move metadata.json if exists
+          METADATA_SOURCE=$(find character_package -name "metadata.json" | head -1)
+          if [ -f "$METADATA_SOURCE" ]; then
+            cp "$METADATA_SOURCE" "metadata/${char_id}.json"
+            echo "✓ Copied metadata"
+          else
+            echo "⚠ No metadata.json found"
+          fi
+          
+          # Move screenshots
+          FACE_SOURCE=$(find character_package -name "face.*" | head -1)
+          if [ -f "$FACE_SOURCE" ]; then
+            cp "$FACE_SOURCE" "screenshots/face/${char_id}$(echo $FACE_SOURCE | sed 's/.*\(\..*\)$/\1/')"
+            echo "✓ Copied face screenshot"
+          fi
+          
+          BODY_SOURCE=$(find character_package -name "body.*" | head -1)
+          if [ -f "$BODY_SOURCE" ]; then
+            cp "$BODY_SOURCE" "screenshots/body/${char_id}$(echo $BODY_SOURCE | sed 's/.*\(\..*\)$/\1/')"
+            echo "✓ Copied body screenshot"
+          fi
+          
+          PREVIEW_SOURCE=$(find character_package -name "preview.*" | head -1)
+          if [ -f "$PREVIEW_SOURCE" ]; then
+            cp "$PREVIEW_SOURCE" "screenshots/preview/${char_id}$(echo $PREVIEW_SOURCE | sed 's/.*\(\..*\)$/\1/')"
+            echo "✓ Copied preview screenshot"
+          fi
+      
+      - name: Update index.json
+        id: update_index
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            
+            const charId = '${{ steps.gen_id.outputs.character_id }}';
+            const charName = '${{ steps.issue_details.outputs.char_name }}';
+            
+            
+            // Read current index.json
+            const indexPath = 'index.json';
+            let index = JSON.parse(fs.readFileSync(indexPath, 'utf8'));
+            
+            // Parse metadata to get character details
+            const metadataPath = `metadata/${charId}.json`;
+            let characterEntry = {
+              id: charId,
+              name: charName,
+              submitted_by: 'github-actions',
+              submitted_at: new Date().toISOString(),
+              downloads: 0,
+              likes: 0
+            };
+            
+            // Try to read and add metadata details
+            if (fs.existsSync(metadataPath)) {
+              try {
+                const metadata = JSON.parse(fs.readFileSync(metadataPath, 'utf8'));
+                characterEntry = {
+                  ...characterEntry,
+                  level: metadata.level || 0,
+                  class: metadata.class || 'Unknown',
+                  stats: metadata.stats || {},
+                  ng_plus: metadata.ng_plus || 0,
+                  playtime: metadata.playtime || 'Unknown',
+                  has_dlc: metadata.in_dlc_area || false,
+                  equipment: Object.keys(metadata.equipment || {}).length || 0
+                };
+              } catch (e) {
+                console.log('Could not parse metadata:', e.message);
+              }
+            }
+            
+            // Add to index
+            index.characters.push(characterEntry);
+            
+            // Sort by ID for consistent ordering
+            index.characters.sort((a, b) => a.id.localeCompare(b.id));
+            
+            // Update metadata
+            index.last_updated = new Date().toISOString();
+            
+            // Write back
+            fs.writeFileSync(indexPath, JSON.stringify(index, null, 2) + '\n');
+            console.log('Updated index.json with new character');
+            core.setOutput('index_updated', 'true');
+      
+      - name: Create Pull Request
+        id: cpr
+        uses: peter-evans/create-pull-request@v5
+        with:
+          commit-message: |
+            feat: add character ${{ steps.gen_id.outputs.character_id }} - ${{ steps.issue_details.outputs.char_name }}
+            
+            Closes #${{ steps.issue_details.outputs.issue_number }}
+          title: "[Character] ${{ steps.issue_details.outputs.char_name }} - ${{ steps.gen_id.outputs.character_id }}"
+          body: |
+            ## Character Submission
+            
+            **Character:** ${{ steps.issue_details.outputs.char_name }}
+            **ID:** ${{ steps.gen_id.outputs.character_id }}
+            **Source Issue:** #${{ steps.issue_details.outputs.issue_number }}
+            
+            ### Changes
+            - Added `characters/${{ steps.gen_id.outputs.character_id }}.erc`
+            - Added `metadata/${{ steps.gen_id.outputs.character_id }}.json`
+            - Added screenshots to `screenshots/`
+            - Updated `index.json`
+          branch: character-${{ steps.gen_id.outputs.character_id }}
+          delete-branch: true
+      
+      - name: Comment on original issue
+        if: steps.cpr.outputs.pull-request-number != ''
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const issueNumber = ${{ steps.issue_details.outputs.issue_number }};
+            const prNumber = ${{ steps.cpr.outputs.pull-request-number }};
+            const charId = '${{ steps.gen_id.outputs.character_id }}';
+            
+            const comment = `✅ **Submission Processed!**
+
+            Your character has been added to the library!
+
+            **Character ID:** \`${charId}\`
+            **Pull Request:** #${prNumber}
+
+            The character is now available in the library. Thank you for sharing!`;
+                        
+                        await github.rest.issues.createComment({
+                          owner: context.repo.owner,
+                          repo: context.repo.repo,
+                          issue_number: issueNumber,
+                          body: comment
+                        });
+                  
+                  - name: Auto-merge for admins
+                    if: steps.cpr.outputs.pull-request-number != '' && github.event.issue.user.login == 'Hapfel1'
+                    uses: actions/github-script@v7
+                    with:
+                      github-token: ${{ secrets.GITHUB_TOKEN }}
+                      script: |
+                        const prNumber = ${{ steps.cpr.outputs.pull-request-number }};
+                        
+                        try {
+                          await github.rest.pulls.merge({
+                            owner: context.repo.owner,
+                            repo: context.repo.repo,
+                            pull_number: prNumber,
+                            merge_method: 'squash',
+                            commit_title: 'Add character ${{ steps.gen_id.outputs.character_id }}'
+                          });
+                          console.log('PR auto-merged');
+                        } catch (error) {
+                          console.log('Could not auto-merge:', error.message);
+                        }

@@ -1,66 +1,130 @@
-name: Publish Character
+name: Manual Character Publishing
 
+# Manual workflow for publishing characters (backup process)
 on:
   workflow_dispatch:
     inputs:
-      issue_number:
-        description: 'Issue number to publish'
+      character_id:
+        description: 'Character ID (e.g., character_001)'
         required: true
-        type: number
+      character_name:
+        description: 'Character display name'
+        required: true
+      issue_number:
+        description: 'Associated issue number (optional)'
+        required: false
 
 jobs:
   publish:
     runs-on: ubuntu-latest
     
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+    
     steps:
-      - uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          
-      - name: Download character from issue
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Validate character exists
         run: |
-          # Get issue body
-          ISSUE_BODY=$(gh issue view ${{ inputs.issue_number }} --json body -q .body)
+          char_id="${{ inputs.character_id }}"
           
-          # Extract ZIP URL
-          ZIP_URL=$(echo "$ISSUE_BODY" | grep -oP 'https://github\.com/.+?\.zip' | head -1)
+          # Check if character files exist
+          if [ ! -f "characters/${char_id}.erc" ]; then
+            echo "ERROR: Character file not found: characters/${char_id}.erc"
+            exit 1
+          fi
           
-          # Download and extract
-          wget "$ZIP_URL" -O submission.zip
-          unzip submission.zip -d submission/
+          if [ ! -f "metadata/${char_id}.json" ]; then
+            echo "WARNING: Metadata not found: metadata/${char_id}.json"
+          fi
           
-      - name: Process character files
-        run: |
-          # Generate character ID from filename
-          ERC_FILE=$(ls submission/*.erc)
-          CHAR_ID=$(basename "$ERC_FILE" .erc)
-          
-          # Move files to appropriate directories
-          mv submission/*.erc characters/
-          mv submission/metadata.json "metadata/${CHAR_ID}.json"
-          
-          # Move screenshots if they exist
-          [ -f submission/face.png ] && mv submission/face.png "screenshots/face/${CHAR_ID}.png"
-          [ -f submission/body.png ] && mv submission/body.png "screenshots/body/${CHAR_ID}.png"
-          [ -f submission/preview.png ] && mv submission/preview.png "screenshots/preview/${CHAR_ID}.png"
-          [ -f submission/thumbnail.png ] && mv submission/thumbnail.png "thumbnails/${CHAR_ID}.png"
-          
+          echo "✓ Character files validated"
+      
       - name: Update index.json
-        run: |
-          # This would be a Python script in practice
-          # For now, manual update required
-          echo "Remember to update index.json manually"
-          
-      - name: Commit and push
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const charId = '${{ inputs.character_id }}';
+            const charName = '${{ inputs.character_name }}';
+            
+            const indexPath = 'index.json';
+            const index = JSON.parse(fs.readFileSync(indexPath, 'utf8'));
+            
+            // Check if already in index
+            const existing = index.characters.find(c => c.id === charId);
+            if (existing) {
+              console.log('Character already in index');
+              return;
+            }
+            
+            // Add character entry
+            const entry = {
+              id: charId,
+              name: charName,
+              published_at: new Date().toISOString(),
+              downloads: 0,
+              likes: 0
+            };
+            
+            // Try to read metadata for additional info
+            try {
+              const metadataPath = `metadata/${charId}.json`;
+              if (fs.existsSync(metadataPath)) {
+                const metadata = JSON.parse(fs.readFileSync(metadataPath, 'utf8'));
+                entry.level = metadata.level;
+                entry.class = metadata.class;
+                entry.ng_plus = metadata.ng_plus;
+              }
+            } catch (e) {
+              console.log('Could not read metadata:', e.message);
+            }
+            
+            index.characters.push(entry);
+            index.characters.sort((a, b) => a.id.localeCompare(b.id));
+            index.last_updated = new Date().toISOString();
+            
+            fs.writeFileSync(indexPath, JSON.stringify(index, null, 2) + '\n');
+            console.log('Updated index.json');
+      
+      - name: Commit changes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add .
-          git commit -m "Add character from issue #${{ inputs.issue_number }}"
-          git push
           
-      - name: Close issue
-        run: |
-          gh issue close ${{ inputs.issue_number }} --comment "✅ Character published! Thank you for your contribution."
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          git add index.json
+          
+          # Check if there are changes
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+          
+          git commit -m "Publish character: ${{ inputs.character_id }} - ${{ inputs.character_name }}"
+          git push
+      
+      - name: Comment on issue
+        if: ${{ inputs.issue_number }}
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const issueNumber = parseInt('${{ inputs.issue_number }}');
+            if (isNaN(issueNumber)) return;
+            
+            const comment = `✅ **Published!**
+
+            Character \`${{ inputs.character_id }}\` has been published to the library.
+
+            It's now available for the community to find and download via the Character Browser.`;
+                        
+                        github.rest.issues.createComment({
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        issue_number: issueNumber,
+                        body: comment
+                        });
