@@ -9,12 +9,12 @@
       "description": "A Land of Reeds warrior using a katana and bow with Convergence mod setup",
       "tags": ["warrior", "katana", "longbow", "convergence"],
       "erc_url": "characters/character_001.erc",
-      "metadata_url": "https://raw.githubusercontent.com/quird/er-character-library/main/metadata/character_001.json",
+      "metadata_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/metadata/character_001.json",
       "screenshots": {
-        "face_url": "https://raw.githubusercontent.com/quird/er-character-library/main/screenshots/face/character_001.jpg",
-        "body_url": "https://raw.githubusercontent.com/quird/er-character-library/main/screenshots/body/character_001.jpg",
-        "preview_url": "https://raw.githubusercontent.com/quird/er-character-library/main/screenshots/preview/character_001.jpg",
-        "thumbnail_url": "https://raw.githubusercontent.com/quird/er-character-library/main/screenshots/thumbs/character_001.jpg"
+        "face_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/face/character_001.jpg",
+        "body_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/body/character_001.jpg",
+        "preview_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/preview/character_001.jpg",
+        "thumbnail_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/thumbs/character_001.jpg"
       },
       "submitted_by": "github-actions",
       "submitted_at": "2026-02-07T15:24:00.622Z",
