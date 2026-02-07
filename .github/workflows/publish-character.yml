@@ -116,15 +116,13 @@ jobs:
             const issueNumber = parseInt('${{ inputs.issue_number }}');
             if (isNaN(issueNumber)) return;
             
-            const comment = `✅ **Published!**
-
-            Character \`${{ inputs.character_id }}\` has been published to the library.
-
-            It's now available for the community to find and download via the Character Browser.`;
-                        
-                        github.rest.issues.createComment({
-                        owner: context.repo.owner,
-                        repo: context.repo.repo,
-                        issue_number: issueNumber,
-                        body: comment
-                        });
+            const comment = '✅ **Published!**\n\n' +
+              'Character `${{ inputs.character_id }}` has been published to the library.\n\n' +
+              'It\'s now available for the community to find and download via the Character Browser.';
+            
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber,
+              body: comment
+            });

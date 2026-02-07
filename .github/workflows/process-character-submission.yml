@@ -88,80 +88,77 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const issueNumber = context.issue.number;
+            const comment = '❌ **Submission Declined**\n\n' +
+              'No ZIP attachment was found in the issue or comments.\n\n' +
+              'Please attach your character package ZIP and re-open or re-submit.';
+            
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber,
+              body: comment
+            });
+            
+            try {
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issueNumber,
+                labels: ['needs-attention']
+              });
+            } catch (e) {
+              console.log('Could not add needs-attention label:', e.message);
+            }
+            
+            try {
+              await github.rest.issues.removeLabel({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issueNumber,
+                name: 'approved'
+              });
+            } catch (e) {
+              console.log('Could not remove approved label:', e.message);
+            }
+            
+            await github.rest.issues.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber,
+              state: 'closed'
+            });
 
-            const comment = `❌ **Submission Declined**
-
-            No ZIP attachment was found in the issue or comments.
-
-            Please attach your character package ZIP and re-open or re-submit.`;
-
-                        await github.rest.issues.createComment({
-                          owner: context.repo.owner,
-                          repo: context.repo.repo,
-                          issue_number: issueNumber,
-                          body: comment
-                        });
-
-                        try {
-                          await github.rest.issues.addLabels({
-                            owner: context.repo.owner,
-                            repo: context.repo.repo,
-                            issue_number: issueNumber,
-                            labels: ['needs-attention']
-                          });
-                        } catch (e) {
-                          console.log('Could not add needs-attention label:', e.message);
-                        }
-
-                        try {
-                          await github.rest.issues.removeLabel({
-                            owner: context.repo.owner,
-                            repo: context.repo.repo,
-                            issue_number: issueNumber,
-                            name: 'approved'
-                          });
-                        } catch (e) {
-                          console.log('Could not remove approved label:', e.message);
-                        }
-
-                        await github.rest.issues.update({
-                          owner: context.repo.owner,
-                          repo: context.repo.repo,
-                          issue_number: issueNumber,
-                          state: 'closed'
-                        });
-
-                  - name: Stop if no ZIP
-                    if: steps.find_zip.outputs.zip_found != 'true'
-                    run: |
-                      echo "No ZIP found; stopping workflow."
-                      exit 1
-                  
-                  - name: Download and extract ZIP
-                    id: extract
-                    if: steps.find_zip.outputs.zip_found == 'true'
-                    run: |
-                      # Download the ZIP
-                      curl -L "${{ steps.find_zip.outputs.zip_url }}" -o character.zip
-                      
-                      # Create extraction directory
-                      mkdir -p character_package
-                      cd character_package
-                      
-                      # Extract ZIP
-                      unzip -q ../character.zip
-                      
-                      # List extracted files
-                      echo "Extracted files:"
-                      find . -type f
-                      
-                      # Find the .erc file
-                      ERC_FILE=$(find . -name "*.erc" -type f | head -1)
-                      if [ -z "$ERC_FILE" ]; then
-                        echo "ERROR: No .erc file found in ZIP"
-                        exit 1
-                      fi
-                      echo "erc_file=$ERC_FILE" >> $GITHUB_ENV
+      - name: Stop if no ZIP
+        if: steps.find_zip.outputs.zip_found != 'true'
+        run: |
+          echo "No ZIP found; stopping workflow."
+          exit 1
+      
+      - name: Download and extract ZIP
+        id: extract
+        if: steps.find_zip.outputs.zip_found == 'true'
+        run: |
+          # Download the ZIP
+          curl -L "${{ steps.find_zip.outputs.zip_url }}" -o character.zip
+          
+          # Create extraction directory
+          mkdir -p character_package
+          cd character_package
+          
+          # Extract ZIP
+          unzip -q ../character.zip
+          
+          # List extracted files
+          echo "Extracted files:"
+          find . -type f
+          
+          # Find the .erc file
+          ERC_FILE=$(find . -name "*.erc" -type f | head -1)
+          if [ -z "$ERC_FILE" ]; then
+            echo "ERROR: No .erc file found in ZIP"
+            exit 1
+          fi
+          echo "erc_file=$ERC_FILE" >> $GITHUB_ENV
       
       - name: Generate character ID
         id: gen_id

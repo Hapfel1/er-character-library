@@ -79,30 +79,27 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const comment = `❌ **Submission Closed - Missing ZIP**
-
-            Your character submission was closed because no ZIP file attachment was found.
-
-            **To submit your character:**
-            1. Create the character package ZIP file
-            2. Attach it directly to the issue (drag & drop into the issue body or comment)
-            3. Re-open this issue or create a new one
-
-            The ZIP must be a GitHub attachment URL, not an external link.`;
-                        
-                        await github.rest.issues.createComment({
-                          owner: context.repo.owner,
-                          repo: context.repo.repo,
-                          issue_number: context.issue.number,
-                          body: comment
-                        });
-                        
-                        await github.rest.issues.update({
-                          owner: context.repo.owner,
-                          repo: context.repo.repo,
-                          issue_number: context.issue.number,
-                          state: 'closed'
-                        });
+            const comment = '❌ **Submission Closed - Missing ZIP**\n\n' +
+              'Your character submission was closed because no ZIP file attachment was found.\n\n' +
+              '**To submit your character:**\n' +
+              '1. Create the character package ZIP file\n' +
+              '2. Attach it directly to the issue (drag & drop into the issue body or comment)\n' +
+              '3. Re-open this issue or create a new one\n\n' +
+              'The ZIP must be a GitHub attachment URL, not an external link.';
+            
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: comment
+            });
+            
+            await github.rest.issues.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              state: 'closed'
+            });
                   
                   - name: Check submission format
                     if: steps.is_submission.outputs.is_submission == 'true' && steps.check_zip.outputs.has_zip == 'true'
@@ -180,91 +177,78 @@ jobs:
             let comment = '';
             
             if (!hasErrors && !hasWarnings) {
-              comment = `✅ **Submission Validated**
-
-            Your character submission looks good! 
-
-            **Next steps for maintainers:**
-            1. Download and test the character package
-            2. Verify character imports correctly
-            3. Check mod compatibility notes
-            4. Add "approved" label when ready to publish
-
-            Thank you for sharing your build!`;
-                          
-                          // Add validation success label
-                          github.rest.issues.addLabels({
-                            owner: context.repo.owner,
-                            repo: context.repo.repo,
-                            issue_number: context.issue.number,
-                            labels: ['validated']
-                          });
-                        } else {
-                          comment = `⚠️ **Submission Needs Attention**
-
-            Your submission has some issues to address:`;
-                          
-                          if (hasErrors) {
-                            comment += `\n\n**❌ Errors (must fix):**\n${errors
-                              .split('\n')
-                              .filter(e => e)
-                              .map(e => '- ' + e)
-                              .join('\n')}`;
-                          }
-                          
-                          if (hasWarnings) {
-                            comment += `\n\n**⚠️  Warnings (recommended):**\n${warnings
-                              .split('\n')
-                              .filter(w => w)
-                              .map(w => '- ' + w)
-                              .join('\n')}`;
-                          }
-                          
-                          comment += `\n\n**How to fix:**
-            1. Review the issues above
-            2. Edit this issue with the corrections
-            3. Make sure your ZIP attachment is present
-            4. Validation will re-run automatically`;
-                          
-                          // Add needs-attention label for errors
-                          if (hasErrors) {
-                            github.rest.issues.addLabels({
-                              owner: context.repo.owner,
-                              repo: context.repo.repo,
-                              issue_number: context.issue.number,
-                              labels: ['needs-attention']
-                            });
-                          }
-                        }
-                        
-                        // Delete any previous validation comments
-                        const comments = await github.rest.issues.listComments({
-                          owner: context.repo.owner,
-                          repo: context.repo.repo,
-                          issue_number: context.issue.number
-                        });
-                        
-                        for (const c of comments.data) {
-                          if (c.user.type === 'Bot' && (
-                            c.body.includes('Submission Validated') || 
-                            c.body.includes('Submission Needs Attention')
-                          )) {
-                            try {
-                              await github.rest.issues.deleteComment({
-                                owner: context.repo.owner,
-                                repo: context.repo.repo,
-                                comment_id: c.id
-                              });
-                            } catch (e) {
-                              console.log('Could not delete old comment');
-                            }
-                          }
-                        }
-                        
-                        // Create validation comment
-                        await github.rest.issues.createComment({
-                          owner: context.repo.owner,
-                          repo: context.repo.repo,
-                          issue_number: context.issue.number,
-                          body: comment
-                        });
+              comment = '✅ **Submission Validated**\n\n';
+              comment += 'Your character submission looks good! \n\n';
+              comment += '**Next steps for maintainers:**\n';
+              comment += '1. Download and test the character package\n';
+              comment += '2. Verify character imports correctly\n';
+              comment += '3. Check mod compatibility notes\n';
+              comment += '4. Add "approved" label when ready to publish\n\n';
+              comment += 'Thank you for sharing your build!';
+              
+              github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                labels: ['validated']
+              });
+            } else {
+              comment = '⚠️ **Submission Needs Attention**\n\n';
+              comment += 'Your submission has some issues to address:\n';
+              
+              if (hasErrors) {
+                comment += '\n**❌ Errors (must fix):**\n';
+                errors.split('\n').filter(e => e).forEach(e => {
+                  comment += '- ' + e + '\n';
+                });
+              }
+              
+              if (hasWarnings) {
+                comment += '\n**⚠️  Warnings (recommended):**\n';
+                warnings.split('\n').filter(w => w).forEach(w => {
+                  comment += '- ' + w + '\n';
+                });
+              }
+              
+              comment += '\n**How to fix:**\n';
+              comment += '1. Review the issues above\n';
+              comment += '2. Edit this issue with the corrections\n';
+              comment += '3. Make sure your ZIP attachment is present\n';
+              comment += '4. Validation will re-run automatically';
+              
+              if (hasErrors) {
+                github.rest.issues.addLabels({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: context.issue.number,
+                  labels: ['needs-attention']
+                });
+              }
+            }
+            
+            const comments = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number
+            });
+            
+            for (const c of comments.data) {
+              if (c.user.type === 'Bot' && (c.body.includes('Submission Validated') || c.body.includes('Submission Needs Attention'))) {
+                try {
+                  await github.rest.issues.deleteComment({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    comment_id: c.id
+                  });
+                } catch (e) {
+                  console.log('Could not delete old comment');
+                }
+              }
+            }
+            
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: comment
+            });
