@@ -252,3 +252,82 @@ jobs:
               issue_number: context.issue.number,
               body: comment
             });
+
+      - name: Check if report
+        id: is_report
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const title = context.payload.issue.title;
+            const body = context.payload.issue.body || '';
+            
+            const isReport = title.startsWith('[Report]') && 
+                            body.includes('**Character ID:**') && 
+                            body.includes('**Reason for Report:**');
+            
+            core.setOutput('is_report', isReport ? 'true' : 'false');
+            console.log('Is report:', isReport);
+      
+      - name: Add report labels
+        if: steps.is_report.outputs.is_report == 'true'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const labels = context.payload.issue.labels.map(l => l.name);
+            const toAdd = [];
+            
+            if (!labels.includes('report')) {
+              toAdd.push('report');
+            }
+            if (!labels.includes('review-needed')) {
+              toAdd.push('review-needed');
+            }
+            
+            if (toAdd.length > 0) {
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                labels: toAdd
+              });
+            }
+      
+      - name: Process character report
+        if: steps.is_report.outputs.is_report == 'true'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const issue = context.payload.issue;
+            const body = issue.body || '';
+            
+            // Extract details
+            const titleMatch = issue.title.match(/\[Report\]\s*(.+)/);
+            const charName = titleMatch ? titleMatch[1].trim() : 'Unknown';
+            
+            const charIdMatch = body.match(/\*\*Character ID:\*\*\s*([^\n]+)/);
+            const charId = charIdMatch ? charIdMatch[1].trim() : 'unknown';
+            
+            const reasonMatch = body.match(/\*\*Reason for Report:\*\*\s*```\n([\s\S]*?)\n```/);
+            const reason = reasonMatch ? reasonMatch[1].trim() : body.split('\n').slice(5).join('\n').trim();
+            
+            const comment = `## 📋 Character Report Summary
+
+**Character:** ${charName} (\`${charId}\`)
+**Reporter:** @${issue.user.login}
+**Status:** 🔍 Pending Moderator Review
+
+### Report Details
+${reason}
+
+---
+A moderator will review this report and take appropriate action.`;
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: comment
+            });

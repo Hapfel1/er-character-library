@@ -2,10 +2,10 @@ name: Process Character Report
 
 on:
   issues:
-    types: [opened, edited]
+    types: [opened]
 
 jobs:
-  process-report:
+  detect-and-process-report:
     runs-on: ubuntu-latest
     
     permissions:
@@ -13,141 +13,91 @@ jobs:
       issues: write
     
     steps:
-      - name: Check if report
-        id: is_report
+      - name: Extract report info
+        id: check_report
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const issue = context.payload.issue;
-            const title = issue.title;
+            const title = issue.title || '';
             const body = issue.body || '';
             
-            // Detect if this is a report by checking title and body structure
-            const isReport = title.includes('[Report]') && 
+            console.log('Issue title:', title);
+            console.log('Issue body length:', body.length);
+            
+            // Check if this is a report by looking for the expected format
+            const isReport = title.startsWith('[Report]') && 
                             body.includes('**Character ID:**') && 
                             body.includes('**Reason for Report:**');
             
-            core.setOutput('is_report', isReport ? 'true' : 'false');
             console.log('Is report:', isReport);
-            console.log('Title:', title);
-      
-      - name: Skip if not a report
-        if: steps.is_report.outputs.is_report != 'true'
-        run: |
-          echo "Not a report, skipping processing"
-          exit 0
-      
-      - name: Add report label
-        if: steps.is_report.outputs.is_report == 'true'
-        uses: actions/github-script@v7
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            try {
-              // Check if report label already exists
-              const labels = context.payload.issue.labels.map(l => l.name);
-              if (!labels.includes('report')) {
-                await github.rest.issues.addLabels({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  issue_number: context.issue.number,
-                  labels: ['report']
-                });
-                console.log('Added report label');
-              }
-            } catch (e) {
-              console.log('Could not add report label:', e.message);
+            
+            if (!isReport) {
+              console.log('Not a report, skipping');
+              return;
             }
-      
-      - name: Extract report details
-        id: report_details
-        if: steps.is_report.outputs.is_report == 'true'
-        uses: actions/github-script@v7
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const issue = context.payload.issue;
-            console.log('Processing report issue:', issue.title);
             
-            // Extract character name from title
-            // Expected format: [Report] Character Name
-            const titleMatch = issue.title.match(/\[Report\]\s*(.+)/);
-            const charName = titleMatch ? titleMatch[1].trim() : 'Unknown Character';
+            // Extract details
+            const charNameMatch = title.match(/\[Report\]\s*(.+)/);
+            const charName = charNameMatch ? charNameMatch[1].trim() : 'Unknown';
             
-            // Extract character ID from body
-            const body = issue.body || '';
-            const idMatch = body.match(/\*\*Character ID:\*\*\s*([^\n]+)/);
-            const charId = idMatch ? idMatch[1].trim() : 'unknown';
+            const charIdMatch = body.match(/\*\*Character ID:\*\*\s*([^\n]+)/);
+            const charId = charIdMatch ? charIdMatch[1].trim() : 'unknown';
             
-            // Extract report reason from body
             const reasonMatch = body.match(/\*\*Reason for Report:\*\*\s*```\n([\s\S]*?)\n```/);
-            const fullReason = reasonMatch ? reasonMatch[1].trim() : body;
+            const reason = reasonMatch ? reasonMatch[1].trim() : body;
             
-            core.setOutput('char_id', charId);
+            console.log('Character:', charName, charId);
+            
+            core.setOutput('is_report', 'true');
             core.setOutput('char_name', charName);
-            core.setOutput('full_reason', fullReason || 'No reason provided');
+            core.setOutput('char_id', charId);
+            core.setOutput('reason', reason);
             core.setOutput('reporter', issue.user.login);
-            core.setOutput('issue_number', issue.number);
-            
-            console.log('Character ID:', charId);
-            console.log('Character Name:', charName);
-            console.log('Reason:', fullReason);
-      
-      - name: Add review needed label
-        if: steps.is_report.outputs.is_report == 'true'
+
+      - name: Add report label
+        if: steps.check_report.outputs.is_report == 'true'
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            try {
+            const labels = context.payload.issue.labels.map(l => l.name);
+            if (!labels.includes('report')) {
               await github.rest.issues.addLabels({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 issue_number: context.issue.number,
-                labels: ['review-needed']
+                labels: ['report', 'review-needed']
               });
-              console.log('Added review-needed label');
-            } catch (e) {
-              console.log('Could not add label:', e.message);
             }
-      
-      - name: Create report summary comment
-        if: steps.is_report.outputs.is_report == 'true'
+
+      - name: Create summary comment
+        if: steps.check_report.outputs.is_report == 'true'
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const charId = '${{ steps.report_details.outputs.char_id }}';
-            const charName = '${{ steps.report_details.outputs.char_name }}';
-            const fullReason = `${{ steps.report_details.outputs.full_reason }}`;
-            const reporter = '${{ steps.report_details.outputs.reporter }}';
-            const issueNumber = ${{ steps.report_details.outputs.issue_number }};
+            const charName = '${{ steps.check_report.outputs.char_name }}';
+            const charId = '${{ steps.check_report.outputs.char_id }}';
+            const reason = `${{ steps.check_report.outputs.reason }}`;
+            const reporter = '${{ steps.check_report.outputs.reporter }}';
             
-            const summary = `## 📋 Report Summary
-            
+            const comment = `## 📋 Report Summary
+
 **Character:** ${charName} (\`${charId}\`)
 **Reporter:** @${reporter}
-**Status:** 🔍 Pending Review
+**Status:** 🔍 Pending Moderator Review
 
 ### Report Details
-${fullReason}
+${reason}
 
 ---
-**Next Steps:** A moderator will review this report and take appropriate action.`;
+A moderator will review this report and take appropriate action.`;
 
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              issue_number: issueNumber,
-              body: summary
+              issue_number: context.issue.number,
+              body: comment
             });
-            
-            console.log('Created report summary comment');
-      
-      - name: Log report metrics
-        if: steps.is_report.outputs.is_report == 'true'
-        run: |
-          echo "📊 Report Processed"
-          echo "Character: ${{ steps.report_details.outputs.char_name }} (${{ steps.report_details.outputs.char_id }})"
-          echo "Reporter: ${{ steps.report_details.outputs.reporter }}"
