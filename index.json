@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "last_updated": "2026-02-07T23:09:48.195Z",
+  "last_updated": "2026-02-08T17:49:26.254Z",
   "characters": [
     {
       "id": "character_002",
@@ -188,6 +188,110 @@
       },
       "requires_mod": false,
       "mod_info": null
+    },
+    {
+      "id": "character_004",
+      "name": "Convergence Starcaller",
+      "author": "Hapfel",
+      "description": "Convergence Starcaller Endgame",
+      "tags": [
+        "Convergence",
+        "Starcaller",
+        "Endgame"
+      ],
+      "erc_url": "characters/character_004.erc",
+      "metadata_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/metadata/character_004.json",
+      "screenshots": {
+        "face_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/face/character_004.jpg",
+        "body_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/body/character_004.jpg",
+        "preview_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/preview/character_004.jpg",
+        "thumbnail_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/thumbs/character_004.jpg"
+      },
+      "submitted_by": "Hapfel1",
+      "submitted_at": "2026-02-08T17:49:26.247Z",
+      "downloads": 0,
+      "likes": 0,
+      "level": 185,
+      "class": "Confessor",
+      "body_type": "Type A",
+      "stats": {
+        "vigor": 61,
+        "mind": 45,
+        "endurance": 40,
+        "strength": 15,
+        "dexterity": 15,
+        "intelligence": 70,
+        "faith": 9,
+        "arcane": 9
+      },
+      "ng_plus": 0,
+      "playtime": "34h 6m 55s",
+      "playtime_seconds": 122815,
+      "has_dlc": true,
+      "equipment": {
+        "right_hand_1": {
+          "id": 67530011,
+          "name": "Unknown Item (0x04066D1B)"
+        },
+        "right_hand_2": {
+          "id": 33250011,
+          "name": "Meteorite Staff"
+        },
+        "right_hand_3": {
+          "id": 67500612,
+          "name": "Unknown Item (0x0405FA44)"
+        },
+        "left_hand_1": {
+          "id": 67530013,
+          "name": "Unknown Item (0x04066D1D)"
+        },
+        "left_hand_2": {
+          "id": 30110000,
+          "name": "Rift Shield"
+        },
+        "left_hand_3": {
+          "id": 110000,
+          "name": "Unknown Item (0x0001ADB0)"
+        },
+        "head": {
+          "id": 1902000,
+          "name": "Glintstone Scarab"
+        },
+        "chest": {
+          "id": 293100,
+          "name": "Night Maiden Armor"
+        },
+        "arms": {
+          "id": 293200,
+          "name": "night maiden bracelets"
+        },
+        "legs": {
+          "id": 293300,
+          "name": "night maiden greaves"
+        },
+        "talisman_1": {
+          "id": 7030,
+          "name": "Two-Headed Turtle Talisman"
+        },
+        "talisman_2": {
+          "id": 3030,
+          "name": "Graven-School Talisman"
+        },
+        "talisman_3": {
+          "id": 8040,
+          "name": "Two-Handed Sword Talisman"
+        },
+        "talisman_4": {
+          "id": 1230,
+          "name": "Warrior Jar Shard"
+        }
+      },
+      "requires_mod": true,
+      "mod_info": {
+        "name": "Convergence",
+        "version": "2.2.3A",
+        "required": true
+      }
     }
   ]
 }
