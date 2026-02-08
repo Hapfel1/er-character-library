@@ -13,248 +13,8 @@ jobs:
       contents: read
     
     steps:
-      - name: Check if submission
-        id: is_submission
-        uses: actions/github-script@v7
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const title = context.payload.issue.title;
-            const isSubmission = title.includes('[Character Submission]');
-            core.setOutput('is_submission', isSubmission ? 'true' : 'false');
-            console.log('Is character submission:', isSubmission);
-      
-      - name: Add character-submission label
-        if: steps.is_submission.outputs.is_submission == 'true'
-        uses: actions/github-script@v7
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            github.rest.issues.addLabels({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-              labels: ['character-submission']
-            });
-      
-      - name: Check for ZIP attachment
-        if: steps.is_submission.outputs.is_submission == 'true'
-        id: check_zip
-        uses: actions/github-script@v7
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const issue = context.payload.issue;
-            
-            // Look for actual ZIP URL in issue body
-            let hasZipUrl = false;
-            const zipUrlPattern = /https:\/\/github\.com\/[^)\s]+\.zip(?:\?[^)\s]+)?/;
-            
-            if (zipUrlPattern.test(issue.body)) {
-              hasZipUrl = true;
-            }
-            
-            // Also check comments for ZIP
-            if (!hasZipUrl) {
-              const comments = await github.rest.issues.listComments({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: context.issue.number
-              });
-              
-              for (const comment of comments.data) {
-                if (zipUrlPattern.test(comment.body)) {
-                  hasZipUrl = true;
-                  break;
-                }
-              }
-            }
-            
-            core.setOutput('has_zip', hasZipUrl ? 'true' : 'false');
-            console.log('ZIP attachment found:', hasZipUrl);
-      
-      - name: Close issue if no ZIP
-        if: steps.is_submission.outputs.is_submission == 'true' && steps.check_zip.outputs.has_zip != 'true'
-        uses: actions/github-script@v7
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const comment = '❌ **Submission Closed - Missing ZIP**\n\n' +
-              'Your character submission was closed because no ZIP file attachment was found.\n\n' +
-              '**To submit your character:**\n' +
-              '1. Create the character package ZIP file\n' +
-              '2. Attach it directly to the issue (drag & drop into the issue body or comment)\n' +
-              '3. Re-open this issue or create a new one\n\n' +
-              'The ZIP must be a GitHub attachment URL, not an external link.';
-            
-            await github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-              body: comment
-            });
-            
-            await github.rest.issues.update({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-              state: 'closed'
-            });
-      
-      - name: Check submission format
-        if: steps.is_submission.outputs.is_submission == 'true' && steps.check_zip.outputs.has_zip == 'true'
-        id: check_format
-        uses: actions/github-script@v7
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const issue = context.payload.issue;
-            const body = issue.body;
-            const title = issue.title;
-            
-            const errors = [];
-            const warnings = [];
-            
-            // Check title format
-            if (!title.includes('[Character Submission]')) {
-              errors.push('Title must include [Character Submission]');
-            }
-            
-            // Check for required sections
-            const requiredSections = [
-              'Character Name',
-              'Author',
-              'Tags',
-              'Stats',
-              'Description'
-            ];
-            
-            for (const section of requiredSections) {
-              if (!body.includes(`**${section}`)) {
-                errors.push(`Missing required section: "**${section}:**"`);
-              }
-            }
-            
-            // Check for screenshots mentions
-            const hasFaceScreenshot = /face|screenshot|image/i.test(body);
-            const hasBodyScreenshot = /body|screenshot|image/i.test(body);
-            if (!hasFaceScreenshot || !hasBodyScreenshot) {
-              warnings.push('Screenshots (face and body) are required for proper submission');
-            }
-            
-            // Check metadata block
-            if (!body.includes('metadata.json')) {
-              warnings.push('metadata.json should be included in the package');
-            }
-            
-            core.setOutput('has_errors', errors.length > 0);
-            core.setOutput('has_warnings', warnings.length > 0);
-            
-            if (errors.length > 0) {
-              console.log('❌ Validation Errors:');
-              errors.forEach(e => console.log('  - ' + e));
-            }
-            
-            if (warnings.length > 0) {
-              console.log('⚠️  Warnings:');
-              warnings.forEach(w => console.log('  - ' + w));
-            }
-            
-            core.setOutput('errors', errors.join('\n'));
-            core.setOutput('warnings', warnings.join('\n'));
-      
-      - name: Comment validation results
-        if: steps.is_submission.outputs.is_submission == 'true' && steps.check_zip.outputs.has_zip == 'true'
-        uses: actions/github-script@v7
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const hasErrors = '${{ steps.check_format.outputs.has_errors }}' === 'true';
-            const hasWarnings = '${{ steps.check_format.outputs.has_warnings }}' === 'true';
-            const errors = '${{ steps.check_format.outputs.errors }}';
-            const warnings = '${{ steps.check_format.outputs.warnings }}';
-            
-            let comment = '';
-            
-            if (!hasErrors && !hasWarnings) {
-              comment = '✅ **Submission Validated**\n\n';
-              comment += 'Your character submission looks good! \n\n';
-              comment += '**Next steps for maintainers:**\n';
-              comment += '1. Download and test the character package\n';
-              comment += '2. Verify character imports correctly\n';
-              comment += '3. Check mod compatibility notes\n';
-              comment += '4. Add "approved" label when ready to publish\n\n';
-              comment += 'Thank you for sharing your build!';
-              
-              github.rest.issues.addLabels({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: context.issue.number,
-                labels: ['validated']
-              });
-            } else {
-              comment = '⚠️ **Submission Needs Attention**\n\n';
-              comment += 'Your submission has some issues to address:\n';
-              
-              if (hasErrors) {
-                comment += '\n**❌ Errors (must fix):**\n';
-                errors.split('\n').filter(e => e).forEach(e => {
-                  comment += '- ' + e + '\n';
-                });
-              }
-              
-              if (hasWarnings) {
-                comment += '\n**⚠️  Warnings (recommended):**\n';
-                warnings.split('\n').filter(w => w).forEach(w => {
-                  comment += '- ' + w + '\n';
-                });
-              }
-              
-              comment += '\n**How to fix:**\n';
-              comment += '1. Review the issues above\n';
-              comment += '2. Edit this issue with the corrections\n';
-              comment += '3. Make sure your ZIP attachment is present\n';
-              comment += '4. Validation will re-run automatically';
-              
-              if (hasErrors) {
-                github.rest.issues.addLabels({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  issue_number: context.issue.number,
-                  labels: ['needs-attention']
-                });
-              }
-            }
-            
-            const comments = await github.rest.issues.listComments({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number
-            });
-            
-            for (const c of comments.data) {
-              if (c.user.type === 'Bot' && (c.body.includes('Submission Validated') || c.body.includes('Submission Needs Attention'))) {
-                try {
-                  await github.rest.issues.deleteComment({
-                    owner: context.repo.owner,
-                    repo: context.repo.repo,
-                    comment_id: c.id
-                  });
-                } catch (e) {
-                  console.log('Could not delete old comment');
-                }
-              }
-            }
-            
-            await github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-              body: comment
-            });
-
-      - name: Check if report
-        id: is_report
+      - name: Determine issue type
+        id: issue_type
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -262,28 +22,29 @@ jobs:
             const title = context.payload.issue.title;
             const body = context.payload.issue.body || '';
             
+            const isSubmission = title.includes('[Character Submission]');
             const isReport = title.startsWith('[Report]') && 
                             body.includes('**Character ID:**') && 
                             body.includes('**Reason for Report:**');
             
+            core.setOutput('is_submission', isSubmission ? 'true' : 'false');
             core.setOutput('is_report', isReport ? 'true' : 'false');
-            console.log('Is report:', isReport);
+            console.log('Submission:', isSubmission, 'Report:', isReport);
       
-      - name: Add report labels
-        if: steps.is_report.outputs.is_report == 'true'
+      - name: Process report
+        if: steps.issue_type.outputs.is_report == 'true'
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const labels = context.payload.issue.labels.map(l => l.name);
-            const toAdd = [];
+            const issue = context.payload.issue;
+            const body = issue.body || '';
             
-            if (!labels.includes('report')) {
-              toAdd.push('report');
-            }
-            if (!labels.includes('review-needed')) {
-              toAdd.push('review-needed');
-            }
+            // Add labels
+            const labels = issue.labels.map(l => l.name);
+            const toAdd = [];
+            if (!labels.includes('report')) toAdd.push('report');
+            if (!labels.includes('review-needed')) toAdd.push('review-needed');
             
             if (toAdd.length > 0) {
               await github.rest.issues.addLabels({
@@ -293,15 +54,6 @@ jobs:
                 labels: toAdd
               });
             }
-      
-      - name: Process character report
-        if: steps.is_report.outputs.is_report == 'true'
-        uses: actions/github-script@v7
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const issue = context.payload.issue;
-            const body = issue.body || '';
             
             // Extract details
             const titleMatch = issue.title.match(/\[Report\]\s*(.+)/);
@@ -311,7 +63,7 @@ jobs:
             const charId = charIdMatch ? charIdMatch[1].trim() : 'unknown';
             
             const reasonMatch = body.match(/\*\*Reason for Report:\*\*\s*```\n([\s\S]*?)\n```/);
-            const reason = reasonMatch ? reasonMatch[1].trim() : body.split('\n').slice(5).join('\n').trim();
+            const reason = reasonMatch ? reasonMatch[1].trim() : body.split('\n').slice(3).join('\n').trim();
             
             const comment = `## 📋 Character Report Summary
 
@@ -331,3 +83,96 @@ A moderator will review this report and take appropriate action.`;
               issue_number: context.issue.number,
               body: comment
             });
+      
+      - name: Process submission
+        if: steps.issue_type.outputs.is_submission == 'true'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            // Add label
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              labels: ['character-submission']
+            });
+            
+            // Check for ZIP
+            const issue = context.payload.issue;
+            let hasZipUrl = false;
+            const zipUrlPattern = /https:\/\/github\.com\/[^)\s]+\.zip(?:\?[^)\s]+)?/;
+            
+            if (zipUrlPattern.test(issue.body)) {
+              hasZipUrl = true;
+            }
+            
+            if (!hasZipUrl) {
+              const comments = await github.rest.issues.listComments({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number
+              });
+              
+              for (const comment of comments.data) {
+                if (zipUrlPattern.test(comment.body)) {
+                  hasZipUrl = true;
+                  break;
+                }
+              }
+            }
+            
+            if (!hasZipUrl) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: '❌ **Submission Closed - Missing ZIP**\n\nNo ZIP file attachment found. Please attach your character package and reopen.'
+              });
+              
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                state: 'closed'
+              });
+              return;
+            }
+            
+            // Check format
+            const body = issue.body;
+            const errors = [];
+            
+            if (!body.includes('**Character Name')) errors.push('Missing Character Name');
+            if (!body.includes('**Author')) errors.push('Missing Author');
+            if (!body.includes('**Tags')) errors.push('Missing Tags');
+            
+            if (errors.length > 0) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: '⚠️ **Issues Found**\n- ' + errors.join('\n- ')
+              });
+              
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                labels: ['needs-attention']
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: '✅ **Submission Valid**\n\nYour character submission looks good!'
+              });
+              
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                labels: ['validated']
+              });
+            }
