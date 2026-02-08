@@ -80,20 +80,17 @@ jobs:
           script: |
             const charName = '${{ steps.check_report.outputs.char_name }}';
             const charId = '${{ steps.check_report.outputs.char_id }}';
-            const reason = `${{ steps.check_report.outputs.reason }}`;
+            const reason = '${{ steps.check_report.outputs.reason }}';
             const reporter = '${{ steps.check_report.outputs.reporter }}';
             
-            const comment = `## 📋 Report Summary
-
-**Character:** ${charName} (\`${charId}\`)
-**Reporter:** @${reporter}
-**Status:** 🔍 Pending Moderator Review
-
-### Report Details
-${reason}
-
----
-A moderator will review this report and take appropriate action.`;
+            const comment = '## 📋 Report Summary\n\n' +
+              '**Character:** ' + charName + ' (`' + charId + '`)\n' +
+              '**Reporter:** @' + reporter + '\n' +
+              '**Status:** 🔍 Pending Moderator Review\n\n' +
+              '### Report Details\n' +
+              reason + '\n\n' +
+              '---\n' +
+              'A moderator will review this report and take appropriate action.';
 
             await github.rest.issues.createComment({
               owner: context.repo.owner,

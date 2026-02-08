@@ -65,17 +65,14 @@ jobs:
             const reasonMatch = body.match(/\*\*Reason for Report:\*\*\s*```\n([\s\S]*?)\n```/);
             const reason = reasonMatch ? reasonMatch[1].trim() : body.split('\n').slice(3).join('\n').trim();
             
-            const comment = `## 📋 Character Report Summary
-
-**Character:** ${charName} (\`${charId}\`)
-**Reporter:** @${issue.user.login}
-**Status:** 🔍 Pending Moderator Review
-
-### Report Details
-${reason}
-
----
-A moderator will review this report and take appropriate action.`;
+            const comment = '## 📋 Character Report Summary\n\n' +
+              '**Character:** ' + charName + ' (`' + charId + '`)\n' +
+              '**Reporter:** @' + issue.user.login + '\n' +
+              '**Status:** 🔍 Pending Moderator Review\n\n' +
+              '### Report Details\n' +
+              reason + '\n\n' +
+              '---\n' +
+              'A moderator will review this report and take appropriate action.';
 
             await github.rest.issues.createComment({
               owner: context.repo.owner,
