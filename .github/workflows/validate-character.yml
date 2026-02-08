@@ -31,56 +31,6 @@ jobs:
             core.setOutput('is_report', isReport ? 'true' : 'false');
             console.log('Submission:', isSubmission, 'Report:', isReport);
       
-      - name: Process report
-        if: steps.issue_type.outputs.is_report == 'true'
-        uses: actions/github-script@v7
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const issue = context.payload.issue;
-            const body = issue.body || '';
-            
-            // Add labels
-            const labels = issue.labels.map(l => l.name);
-            const toAdd = [];
-            if (!labels.includes('report')) toAdd.push('report');
-            if (!labels.includes('review-needed')) toAdd.push('review-needed');
-            
-            if (toAdd.length > 0) {
-              await github.rest.issues.addLabels({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: context.issue.number,
-                labels: toAdd
-              });
-            }
-            
-            // Extract details
-            const titleMatch = issue.title.match(/\[Report\]\s*(.+)/);
-            const charName = titleMatch ? titleMatch[1].trim() : 'Unknown';
-            
-            const charIdMatch = body.match(/\*\*Character ID:\*\*\s*([^\n]+)/);
-            const charId = charIdMatch ? charIdMatch[1].trim() : 'unknown';
-            
-            const reasonMatch = body.match(/\*\*Reason for Report:\*\*\s*```\n([\s\S]*?)\n```/);
-            const reason = reasonMatch ? reasonMatch[1].trim() : body.split('\n').slice(3).join('\n').trim();
-            
-            const comment = '## 📋 Character Report Summary\n\n' +
-              '**Character:** ' + charName + ' (`' + charId + '`)\n' +
-              '**Reporter:** @' + issue.user.login + '\n' +
-              '**Status:** 🔍 Pending Moderator Review\n\n' +
-              '### Report Details\n' +
-              reason + '\n\n' +
-              '---\n' +
-              'A moderator will review this report and take appropriate action.';
-
-            await github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-              body: comment
-            });
-      
       - name: Process submission
         if: steps.issue_type.outputs.is_submission == 'true'
         uses: actions/github-script@v7
@@ -163,7 +113,7 @@ jobs:
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 issue_number: context.issue.number,
-                body: '✅ **Submission Valid**\n\nYour character submission looks good!'
+                body: '✅ **Submission Valid**\n\nYour character submission looks good!\n\nA maintainer will review it shortly and merge it if everything checks out.'
               });
               
               await github.rest.issues.addLabels({
