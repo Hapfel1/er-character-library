@@ -65,5 +65,13 @@
   "convergence": {
     "convergence_detected": true,
     "custom_items": {}
+  },
+  "author": "Hapfel",
+  "submitted_by": "Hapfel1",
+  "screenshots": {
+    "face_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/face/character_005.jpg",
+    "body_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/body/character_005.jpg",
+    "preview_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/preview/character_005.jpg",
+    "thumbnail_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/thumbs/character_005.jpg"
   }
 }
