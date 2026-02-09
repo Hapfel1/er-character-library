@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "last_updated": "2026-02-09T00:28:57.566Z",
+  "last_updated": "2026-02-09T12:21:37.323Z",
   "characters": [
     {
       "id": "character_002",
@@ -312,6 +312,85 @@
       },
       "submitted_by": "Hapfel1",
       "submitted_at": "2026-02-09T00:28:57.558Z",
+      "downloads": 0,
+      "likes": 0,
+      "level": 90,
+      "class": "Samurai",
+      "body_type": "Type A",
+      "stats": {
+        "vigor": 44,
+        "mind": 18,
+        "endurance": 20,
+        "strength": 12,
+        "dexterity": 24,
+        "intelligence": 9,
+        "faith": 33,
+        "arcane": 9
+      },
+      "ng_plus": 0,
+      "playtime": "13h 58m 36s",
+      "playtime_seconds": 50316,
+      "has_dlc": true,
+      "equipment": {
+        "right_hand_1": {
+          "id": 17050009,
+          "name": "Vyke's War Spear"
+        },
+        "left_hand_1": {
+          "id": 34090004,
+          "name": "Frenzied Flame Seal"
+        },
+        "left_hand_2": {
+          "id": 31300000,
+          "name": "Blue Crest Heater Shield"
+        },
+        "chest": {
+          "id": 950100,
+          "name": "Fingerprint Armor"
+        },
+        "arms": {
+          "id": 950200,
+          "name": "Fingerprint Gauntlets"
+        },
+        "legs": {
+          "id": 950300,
+          "name": "Fingerprint Greaves"
+        },
+        "talisman_1": {
+          "id": 1051,
+          "name": "Radagon's Soreseal"
+        },
+        "talisman_2": {
+          "id": 2180,
+          "name": "Claw Talisman"
+        },
+        "talisman_3": {
+          "id": 1021,
+          "name": "Viridian Amber Medallion +1"
+        }
+      },
+      "requires_mod": false,
+      "mod_info": null
+    },
+    {
+      "id": "character_006",
+      "name": "Madness Build",
+      "author": "Hapfel",
+      "description": "Madness Build MidGame",
+      "tags": [
+        "Madness",
+        "MidGame"
+      ],
+      "erc_url": "characters/character_006.erc",
+      "metadata_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/metadata/character_006.json",
+      "screenshots": {
+        "face_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/face/character_006.jpg",
+        "body_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/body/character_006.jpg",
+        "preview_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/preview/character_006.jpg",
+        "thumbnail_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/thumbs/character_006.jpg"
+      },
+      "submitted_by": "Hapfel1",
+      "submitted_at": "2026-02-09T12:21:37.316Z",
       "downloads": 0,
       "likes": 0,
       "level": 90,
