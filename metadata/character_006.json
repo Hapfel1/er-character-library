@@ -61,5 +61,13 @@
       "name": "Viridian Amber Medallion +1"
     }
   },
-  "has_dlc": true
+  "has_dlc": true,
+  "author": "Hapfel",
+  "submitted_by": "Hapfel1",
+  "screenshots": {
+    "face_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/face/character_006.jpg",
+    "body_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/body/character_006.jpg",
+    "preview_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/preview/character_006.jpg",
+    "thumbnail_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/thumbs/character_006.jpg"
+  }
 }
