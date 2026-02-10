@@ -26,7 +26,7 @@
   "equipment": {
     "right_hand_1": {
       "id": 67530011,
-      "name": "Unknown Item (0x04066D1B)"
+      "name": "Sword of the Cosmos"
     },
     "right_hand_2": {
       "id": 33250011,
@@ -34,11 +34,7 @@
     },
     "right_hand_3": {
       "id": 67500612,
-      "name": "Unknown Item (0x0405FA44)"
-    },
-    "left_hand_1": {
-      "id": 67530013,
-      "name": "Unknown Item (0x04066D1D)"
+      "name": "Milady"
     },
     "left_hand_2": {
       "id": 30110000,
