@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "last_updated": "2026-02-10T00:47:12.618Z",
+  "last_updated": "2026-04-10T07:09:01.036Z",
   "characters": [
     {
       "id": "character_006",
@@ -176,6 +176,84 @@
         "version": "2.2.3A",
         "required": true
       }
+    },
+    {
+      "id": "character_008",
+      "name": "UseTheLfgCoop",
+      "author": "ghostlyswat12",
+      "description": "level 150 character made for pvp dex build",
+      "tags": [
+        "**Stats:** Level 150 • Vagabond"
+      ],
+      "erc_url": "characters/character_008.erc",
+      "metadata_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/metadata/character_008.json",
+      "screenshots": {
+        "face_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/face/character_008.jpg",
+        "body_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/body/character_008.jpg",
+        "preview_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/preview/character_008.jpg",
+        "thumbnail_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/thumbs/character_008.jpg"
+      },
+      "submitted_by": "Ghostlyswat12",
+      "submitted_at": "2026-04-10T07:09:01.029Z",
+      "downloads": 0,
+      "likes": 0,
+      "level": 150,
+      "class": "Vagabond",
+      "body_type": "Type A",
+      "stats": {
+        "vigor": 78,
+        "mind": 11,
+        "endurance": 30,
+        "strength": 32,
+        "dexterity": 53,
+        "intelligence": 9,
+        "faith": 9,
+        "arcane": 7
+      },
+      "ng_plus": 0,
+      "playtime": "5h 28m 40s",
+      "playtime_seconds": 19720,
+      "has_dlc": true,
+      "equipment": {
+        "right_hand_1": {
+          "id": 9020010,
+          "name": "Hand of Malenia"
+        },
+        "head": {
+          "id": 660000,
+          "name": "Vagabond Knight Helm"
+        },
+        "chest": {
+          "id": 660100,
+          "name": "Vagabond Knight Armor"
+        },
+        "arms": {
+          "id": 660200,
+          "name": "Vagabond Knight Gauntlets"
+        },
+        "legs": {
+          "id": 660300,
+          "name": "Vagabond Knight Greaves"
+        },
+        "talisman_1": {
+          "id": 1231,
+          "name": "Shard of Alexander"
+        },
+        "talisman_2": {
+          "id": 2081,
+          "name": "Rotten Winged Sword Insignia"
+        },
+        "talisman_3": {
+          "id": 7030,
+          "name": "Two-Headed Turtle Talisman"
+        },
+        "talisman_4": {
+          "id": 8040,
+          "name": "Two-Handed Sword Talisman"
+        }
+      },
+      "requires_mod": false,
+      "mod_info": null
     }
   ]
 }
