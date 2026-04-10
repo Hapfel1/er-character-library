@@ -1,7 +1,89 @@
 {
   "version": "1.0.0",
-  "last_updated": "2026-04-10T07:09:01.036Z",
+  "last_updated": "2026-04-10T19:27:06.099Z",
   "characters": [
+    {
+      "id": "character_000",
+      "name": "bow mon",
+      "author": "ghostlyswat12 (UseTheLfgCoopChannel)",
+      "description": "bow build for pvp",
+      "tags": [
+        "bow"
+      ],
+      "erc_url": "characters/character_000.erc",
+      "metadata_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/metadata/character_000.json",
+      "screenshots": {
+        "face_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/face/character_000.jpg",
+        "body_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/body/character_000.jpg",
+        "preview_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/preview/character_000.jpg",
+        "thumbnail_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/thumbs/character_000.jpg"
+      },
+      "submitted_by": "Ghostlyswat12",
+      "submitted_at": "2026-04-10T19:27:06.092Z",
+      "downloads": 0,
+      "likes": 0,
+      "level": 150,
+      "class": "Vagabond",
+      "body_type": "Type A",
+      "stats": {
+        "vigor": 60,
+        "mind": 10,
+        "endurance": 34,
+        "strength": 60,
+        "dexterity": 40,
+        "intelligence": 9,
+        "faith": 9,
+        "arcane": 7
+      },
+      "ng_plus": 0,
+      "playtime": "8h 48m 30s",
+      "playtime_seconds": 31710,
+      "has_dlc": true,
+      "equipment": {
+        "right_hand_1": {
+          "id": 60510125,
+          "name": "Unknown Item (0x039B4FAD)"
+        },
+        "left_hand_1": {
+          "id": 60500125,
+          "name": "Unknown Item (0x039B289D)"
+        },
+        "head": {
+          "id": 5160000,
+          "name": "Rakshasa Helm"
+        },
+        "chest": {
+          "id": 5230100,
+          "name": "Gravebird's Blackquill Armor"
+        },
+        "arms": {
+          "id": 360200,
+          "name": "Fire Prelate Gauntlets"
+        },
+        "legs": {
+          "id": 5253300,
+          "name": "Divine Bird Warrior Greaves"
+        },
+        "talisman_1": {
+          "id": 8030,
+          "name": "Shattered Stone Talisman"
+        },
+        "talisman_2": {
+          "id": 2200,
+          "name": "Curved Sword Talisman"
+        },
+        "talisman_3": {
+          "id": 1231,
+          "name": "Shard of Alexander"
+        },
+        "talisman_4": {
+          "id": 7030,
+          "name": "Two-Headed Turtle Talisman"
+        }
+      },
+      "requires_mod": false,
+      "mod_info": null
+    },
     {
       "id": "character_006",
       "name": "Madness Build",
