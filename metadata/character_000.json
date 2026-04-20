@@ -26,11 +26,11 @@
   "equipment": {
     "right_hand_1": {
       "id": 60510125,
-      "name": "Unknown Item (0x039B4FAD)"
+      "name": "Golem Bow"
     },
     "left_hand_1": {
       "id": 60500125,
-      "name": "Unknown Item (0x039B289D)"
+      "name": "Bone Bow"
     },
     "head": {
       "id": 5160000,
@@ -65,5 +65,13 @@
       "name": "Two-Headed Turtle Talisman"
     }
   },
-  "has_dlc": true
+  "has_dlc": true,
+  "author": "ghostlyswat12 (UseTheLfgCoopChannel)",
+  "submitted_by": "Ghostlyswat12",
+  "screenshots": {
+    "face_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/face/character_000.jpg",
+    "body_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/body/character_000.jpg",
+    "preview_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/preview/character_000.jpg",
+    "thumbnail_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/thumbs/character_000.jpg"
+  }
 }
