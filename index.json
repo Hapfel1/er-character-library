@@ -85,20 +85,20 @@
       "mod_info": null
     },
     {
-      "id": "character_000",
+      "id": "character_001",
       "name": "Rock",
       "author": "Brain",
       "description": "just to recover fbrother save file",
       "tags": [
         "**Stats:** Level 87 • Wretch"
       ],
-      "erc_url": "characters/character_000.erc",
-      "metadata_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/metadata/character_000.json",
+      "erc_url": "characters/character_001.erc",
+      "metadata_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/metadata/character_001.json",
       "screenshots": {
-        "face_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/face/character_000.jpg",
-        "body_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/body/character_000.jpg",
-        "preview_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/preview/character_000.jpg",
-        "thumbnail_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/thumbs/character_000.jpg"
+        "face_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/face/character_001.jpg",
+        "body_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/body/character_001.jpg",
+        "preview_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/preview/character_001.jpg",
+        "thumbnail_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/thumbs/character_001.jpg"
       },
       "submitted_by": "BBrainzz",
       "submitted_at": "2026-04-20T17:44:18.097Z",
@@ -124,11 +124,11 @@
       "equipment": {
         "right_hand_1": {
           "id": 12140914,
-          "name": "Unknown Item (0x00B94172)"
+          "name": "Cold Pickaxe +14"
         },
         "right_hand_2": {
           "id": 1030113,
-          "name": "Unknown Item (0x000FB7E1)"
+          "name": "Heavy Misericorde +13"
         },
         "left_hand_1": {
           "id": 32260000,
