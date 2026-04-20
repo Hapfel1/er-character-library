@@ -30,22 +30,17 @@ jobs:
             console.log('Issue title:', issue.title);
             console.log('Labels:', issue.labels.map(l => l.name));
             
-            // Extract character name from title
             const match = issue.title.match(/\[Character Submission\]\s*(.+)/);
             const charName = match ? match[1].trim() : 'unknown';
             
-            // Extract metadata from issue body
             const body = issue.body;
             
-            // Extract author
             const authorMatch = body.match(/\*\*Author:\*\*\s*([^\n]+)/);
             const author = authorMatch ? authorMatch[1].trim() : 'Unknown';
             
-            // Extract description
             const descMatch = body.match(/\*\*Description:\*\*\s*\n([\s\S]*?)(?:\n\n|$)/);
             const description = descMatch ? descMatch[1].trim().split('\n')[0] : '';
             
-            // Extract tags
             const tagsMatch = body.match(/\*\*Tags:\*\*\s*([^\n]+)/);
             const tagsStr = tagsMatch ? tagsMatch[1].trim() : '';
             const tags = tagsStr.length > 0 ? tagsStr.split(',').map(t => t.trim()) : [];
@@ -64,7 +59,6 @@ jobs:
           script: |
             const issue = context.payload.issue;
             
-            // Look for attachment URL in issue comments
             const comments = await github.rest.issues.listComments({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -73,9 +67,7 @@ jobs:
             
             let downloadUrl = null;
             
-            // Search comments for attachment
             for (const comment of comments.data) {
-              // GitHub puts attachment URLs like: https://github.com/user/repo/files/...
               const urlMatch = comment.body.match(/https:\/\/github\.com\/[^)\s]+\.zip(?:\?[^)\s]+)?/);
               if (urlMatch) {
                 downloadUrl = urlMatch[0];
@@ -83,7 +75,6 @@ jobs:
               }
             }
             
-            // Also check issue body for attachment
             if (!downloadUrl) {
               const bodyMatch = issue.body.match(/https:\/\/github\.com\/[^)\s]+\.zip(?:\?[^)\s]+)?/);
               if (bodyMatch) {
@@ -157,59 +148,201 @@ jobs:
         id: extract
         if: steps.find_zip.outputs.zip_found == 'true'
         run: |
-          # Download the ZIP
           curl -L "${{ steps.find_zip.outputs.zip_url }}" -o character.zip
           
-          # Create extraction directory
           mkdir -p character_package
           cd character_package
-          
-          # Extract ZIP (overwrite if re-run)
           unzip -oq ../character.zip
           
-          # List extracted files
           echo "Extracted files:"
           find . -type f
           
-          # Find the .erc file
           ERC_FILE=$(find . -name "*.erc" -type f | head -1)
           if [ -z "$ERC_FILE" ]; then
             echo "ERROR: No .erc file found in ZIP"
             exit 1
           fi
           echo "erc_file=$ERC_FILE" >> $GITHUB_ENV
-      
-      - name: Generate character ID
+
+      # -----------------------------------------------------------------------
+      # ID LOCK: Try to atomically claim the next free character ID by creating
+      # a lock branch on the remote. Only one workflow can create the branch;
+      # concurrent runs retry until the lock is released.
+      # -----------------------------------------------------------------------
+      - name: Acquire ID lock and assign character ID
         id: gen_id
-        run: |
-          # Find the highest existing character ID number
-          max_id=0
-          if [ -d "characters" ]; then
-            # Extract numbers from existing character files and find the max
-            for file in characters/character_*.erc; do
-              if [ -f "$file" ]; then
-                num=$(basename "$file" | sed 's/character_\([0-9]*\)\.erc/\1/')
-                if [ "$num" -gt "$max_id" ]; then
-                  max_id=$num
-                fi
-              fi
-            done
-          fi
-          
-          next_id=$((max_id + 1))
-          char_id=$(printf "character_%03d" $next_id)
-          
-          echo "character_id=$char_id" >> $GITHUB_OUTPUT
-          echo "Generated character ID: $char_id (max was $max_id)"
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const { execSync } = require('child_process');
+
+            const MAX_ATTEMPTS = 10;
+            const RETRY_DELAY_MS = 8000;
+            const LOCK_BRANCH = 'id-assignment-lock';
+
+            // Configure git identity for lock branch operations
+            execSync('git config user.name "github-actions[bot]"');
+            execSync('git config user.email "github-actions[bot]@users.noreply.github.com"');
+
+            async function sleep(ms) {
+              return new Promise(resolve => setTimeout(resolve, ms));
+            }
+
+            // Compute the next free ID from both the filesystem AND index.json,
+            // taking the max of all sources to be safe.
+            function computeNextFreeId() {
+              let maxId = 0;
+
+              // 1. Scan characters/ directory
+              if (fs.existsSync('characters')) {
+                const files = fs.readdirSync('characters');
+                for (const file of files) {
+                  const m = file.match(/^character_(\d+)\.erc$/);
+                  if (m) {
+                    const n = parseInt(m[1], 10);
+                    if (n > maxId) maxId = n;
+                  }
+                }
+              }
+
+              // 2. Scan index.json — catches entries whose files may be in an
+              //    in-flight PR branch not yet merged, but already recorded.
+              if (fs.existsSync('index.json')) {
+                try {
+                  const index = JSON.parse(fs.readFileSync('index.json', 'utf8'));
+                  for (const c of (index.characters || [])) {
+                    const m = (c.id || '').match(/^character_(\d+)$/);
+                    if (m) {
+                      const n = parseInt(m[1], 10);
+                      if (n > maxId) maxId = n;
+                    }
+                  }
+                } catch (e) {
+                  console.log('Warning: could not parse index.json:', e.message);
+                }
+              }
+
+              // 3. Scan open PR branch names — catches in-flight submissions
+              //    that have a branch but whose PR hasn't been merged yet.
+              try {
+                const branches = await github.paginate(github.rest.git.listMatchingRefs, {
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  ref: 'heads/character-character_'
+                });
+                for (const b of branches) {
+                  const m = b.ref.match(/refs\/heads\/character-character_(\d+)$/);
+                  if (m) {
+                    const n = parseInt(m[1], 10);
+                    if (n > maxId) maxId = n;
+                  }
+                }
+              } catch (e) {
+                console.log('Warning: could not list PR branches:', e.message);
+              }
+
+              return maxId + 1;
+            }
+
+            // Try to acquire the lock by creating the lock branch atomically.
+            // The GitHub API rejects branch creation if the branch already exists,
+            // which gives us a compare-and-swap style primitive.
+            async function tryAcquireLock() {
+              const mainRef = await github.rest.git.getRef({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                ref: 'heads/main'
+              });
+              const sha = mainRef.data.object.sha;
+
+              try {
+                await github.rest.git.createRef({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  ref: `refs/heads/${LOCK_BRANCH}`,
+                  sha
+                });
+                console.log('Lock acquired.');
+                return true;
+              } catch (e) {
+                if (e.status === 422) {
+                  console.log('Lock branch already exists — another run holds the lock.');
+                  return false;
+                }
+                throw e;
+              }
+            }
+
+            async function releaseLock() {
+              try {
+                await github.rest.git.deleteRef({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  ref: `heads/${LOCK_BRANCH}`
+                });
+                console.log('Lock released.');
+              } catch (e) {
+                console.log('Warning: could not release lock:', e.message);
+              }
+            }
+
+            let acquired = false;
+            for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+              console.log(`Lock attempt ${attempt}/${MAX_ATTEMPTS}...`);
+              acquired = await tryAcquireLock();
+              if (acquired) break;
+              if (attempt < MAX_ATTEMPTS) {
+                console.log(`Waiting ${RETRY_DELAY_MS / 1000}s before retrying...`);
+                await sleep(RETRY_DELAY_MS);
+                // Pull latest main so our filesystem scan is fresh
+                try { execSync('git fetch origin main && git reset --hard origin/main', { stdio: 'inherit' }); } catch (_) {}
+              }
+            }
+
+            if (!acquired) {
+              core.setFailed('Could not acquire ID lock after ' + MAX_ATTEMPTS + ' attempts. Try re-running the workflow.');
+              return;
+            }
+
+            let charId;
+            try {
+              const nextId = await computeNextFreeId();
+              charId = `character_${String(nextId).padStart(3, '0')}`;
+              console.log(`Assigned character ID: ${charId}`);
+
+              // Sanity check: verify neither the file nor the index entry exist
+              if (fs.existsSync(`characters/${charId}.erc`)) {
+                core.setFailed(`Safety check failed: characters/${charId}.erc already exists!`);
+                return;
+              }
+              if (fs.existsSync('index.json')) {
+                const index = JSON.parse(fs.readFileSync('index.json', 'utf8'));
+                if ((index.characters || []).some(c => c.id === charId)) {
+                  core.setFailed(`Safety check failed: ${charId} is already in index.json!`);
+                  return;
+                }
+              }
+            } catch (e) {
+              await releaseLock();
+              throw e;
+            }
+
+            core.setOutput('character_id', charId);
+            core.setOutput('lock_held', 'true');
+
+            // Lock is intentionally NOT released here — it stays held until
+            // the PR branch is created, at which point the branch scan in
+            // computeNextFreeId() will see it and future runs will skip it.
+            // The lock is released in the "Release ID lock" step below.
       
       - name: Validate and move files
         run: |
           char_id="${{ steps.gen_id.outputs.character_id }}"
           
-          # Create directories
           mkdir -p characters metadata screenshots/face screenshots/body screenshots/preview thumbnails
           
-          # Move .erc file
           ERC_SOURCE=$(find character_package -name "*.erc" -type f | head -1)
           if [ ! -f "$ERC_SOURCE" ]; then
             echo "ERROR: .erc file not found"
@@ -218,7 +351,6 @@ jobs:
           cp "$ERC_SOURCE" "characters/${char_id}.erc"
           echo "✓ Copied .erc file"
           
-          # Move metadata.json if exists
           METADATA_SOURCE=$(find character_package -name "metadata.json" | head -1)
           if [ -f "$METADATA_SOURCE" ]; then
             cp "$METADATA_SOURCE" "metadata/${char_id}.json"
@@ -227,22 +359,21 @@ jobs:
             echo "⚠ No metadata.json found"
           fi
           
-          # Move screenshots
           FACE_SOURCE=$(find character_package -name "face.*" | head -1)
           if [ -f "$FACE_SOURCE" ]; then
-            cp "$FACE_SOURCE" "screenshots/face/${char_id}$(echo $FACE_SOURCE | sed 's/.*\(\..*\)$/\1/')"
+            cp "$FACE_SOURCE" "screenshots/face/${char_id}$(echo $FACE_SOURCE | sed 's/.*\(\\..*\)$/\1/')"
             echo "✓ Copied face screenshot"
           fi
           
           BODY_SOURCE=$(find character_package -name "body.*" | head -1)
           if [ -f "$BODY_SOURCE" ]; then
-            cp "$BODY_SOURCE" "screenshots/body/${char_id}$(echo $BODY_SOURCE | sed 's/.*\(\..*\)$/\1/')"
+            cp "$BODY_SOURCE" "screenshots/body/${char_id}$(echo $BODY_SOURCE | sed 's/.*\(\\..*\)$/\1/')"
             echo "✓ Copied body screenshot"
           fi
           
           PREVIEW_SOURCE=$(find character_package -name "preview.*" | head -1)
           if [ -f "$PREVIEW_SOURCE" ]; then
-            cp "$PREVIEW_SOURCE" "screenshots/preview/${char_id}$(echo $PREVIEW_SOURCE | sed 's/.*\(\..*\)$/\1/')"
+            cp "$PREVIEW_SOURCE" "screenshots/preview/${char_id}$(echo $PREVIEW_SOURCE | sed 's/.*\(\\..*\)$/\1/')"
             echo "✓ Copied preview screenshot"
           fi
       
@@ -254,7 +385,6 @@ jobs:
           repo_name="${{ github.repository }}"
           
           if [ -f "metadata/${char_id}.json" ]; then
-            # Update metadata with author and screenshot URLs
             NODE_CHAR_ID="$char_id" NODE_AUTHOR="$author" NODE_SUBMITTER="$submitter" NODE_REPO="$repo_name" node -e "const fs = require('fs'); const charId = process.env.NODE_CHAR_ID; const author = process.env.NODE_AUTHOR; const submitter = process.env.NODE_SUBMITTER; const baseUrl = 'https://raw.githubusercontent.com/' + process.env.NODE_REPO + '/main'; const metadataPath = 'metadata/' + charId + '.json'; const metadata = JSON.parse(fs.readFileSync(metadataPath, 'utf8')); metadata.author = author; metadata.submitted_by = submitter; metadata.screenshots = { face_url: baseUrl + '/screenshots/face/' + charId + '.jpg', body_url: baseUrl + '/screenshots/body/' + charId + '.jpg', preview_url: baseUrl + '/screenshots/preview/' + charId + '.jpg', thumbnail_url: baseUrl + '/screenshots/thumbs/' + charId + '.jpg' }; fs.writeFileSync(metadataPath, JSON.stringify(metadata, null, 2) + '\n'); console.log('Updated metadata.json with author and screenshot URLs');"
           fi
       
@@ -265,20 +395,23 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const fs = require('fs');
-            const path = require('path');
             
             const charId = '${{ steps.gen_id.outputs.character_id }}';
             const charName = '${{ steps.issue_details.outputs.char_name }}';
             const character_author = '${{ steps.issue_details.outputs.author }}';
             const character_description = '${{ steps.issue_details.outputs.description }}';
             const character_tags = JSON.parse('${{ steps.issue_details.outputs.tags }}');
-            const github_context = context;
             
-            // Read current index.json
             const indexPath = 'index.json';
             let index = JSON.parse(fs.readFileSync(indexPath, 'utf8'));
             
-            // Parse metadata to get character details
+            // Guard: skip if this ID is somehow already present (should never
+            // happen with the lock in place, but belts-and-suspenders).
+            if ((index.characters || []).some(c => c.id === charId)) {
+              core.setFailed(`Duplicate detected: ${charId} is already in index.json. Aborting to prevent overwrite.`);
+              return;
+            }
+            
             const metadataPath = `metadata/${charId}.json`;
             const baseUrl = `https://raw.githubusercontent.com/${context.repo.owner}/${context.repo.repo}/main`;
             
@@ -296,13 +429,12 @@ jobs:
                 preview_url: `${baseUrl}/screenshots/preview/${charId}.jpg`,
                 thumbnail_url: `${baseUrl}/screenshots/thumbs/${charId}.jpg`
               },
-              submitted_by: github_context.payload.issue.user.login,
+              submitted_by: context.payload.issue.user.login,
               submitted_at: new Date().toISOString(),
               downloads: 0,
               likes: 0
             };
             
-            // Try to read and add metadata details
             if (fs.existsSync(metadataPath)) {
               try {
                 const metadata = JSON.parse(fs.readFileSync(metadataPath, 'utf8'));
@@ -325,18 +457,12 @@ jobs:
               }
             }
             
-            // Add to index
             index.characters.push(characterEntry);
-            
-            // Sort by ID for consistent ordering
             index.characters.sort((a, b) => a.id.localeCompare(b.id));
-            
-            // Update metadata
             index.last_updated = new Date().toISOString();
             
-            // Write back
             fs.writeFileSync(indexPath, JSON.stringify(index, null, 2) + '\n');
-            console.log('Updated index.json with new character');
+            console.log('Updated index.json with', charId);
             core.setOutput('index_updated', 'true');
       
       - name: Create Pull Request
@@ -362,6 +488,27 @@ jobs:
             - Updated `index.json`
           branch: character-${{ steps.gen_id.outputs.character_id }}
           delete-branch: true
+
+      # -----------------------------------------------------------------------
+      # RELEASE LOCK: Now that the PR branch exists, future runs will see it
+      # in their branch scan and skip this ID. Safe to release the lock.
+      # -----------------------------------------------------------------------
+      - name: Release ID lock
+        if: always() && steps.gen_id.outputs.lock_held == 'true'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            try {
+              await github.rest.git.deleteRef({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                ref: 'heads/id-assignment-lock'
+              });
+              console.log('ID lock released.');
+            } catch (e) {
+              console.log('Could not release lock (may already be gone):', e.message);
+            }
       
       - name: Comment on original issue
         if: steps.cpr.outputs.pull-request-number != ''
