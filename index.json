@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "last_updated": "2026-04-10T19:27:06.099Z",
+  "last_updated": "2026-04-20T17:44:18.105Z",
   "characters": [
     {
       "id": "character_000",
@@ -79,6 +79,96 @@
         "talisman_4": {
           "id": 7030,
           "name": "Two-Headed Turtle Talisman"
+        }
+      },
+      "requires_mod": false,
+      "mod_info": null
+    },
+    {
+      "id": "character_001",
+      "name": "Rock",
+      "author": "Brain",
+      "description": "just to recover fbrother save file",
+      "tags": [
+        "**Stats:** Level 87 • Wretch"
+      ],
+      "erc_url": "characters/character_001.erc",
+      "metadata_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/metadata/character_001.json",
+      "screenshots": {
+        "face_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/face/character_001.jpg",
+        "body_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/body/character_001.jpg",
+        "preview_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/preview/character_001.jpg",
+        "thumbnail_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/thumbs/character_001.jpg"
+      },
+      "submitted_by": "BBrainzz",
+      "submitted_at": "2026-04-20T17:44:18.097Z",
+      "downloads": 0,
+      "likes": 0,
+      "level": 87,
+      "class": "Wretch",
+      "body_type": "Type B",
+      "stats": {
+        "vigor": 29,
+        "mind": 10,
+        "endurance": 30,
+        "strength": 34,
+        "dexterity": 16,
+        "intelligence": 22,
+        "faith": 10,
+        "arcane": 15
+      },
+      "ng_plus": 0,
+      "playtime": "21h 55m 36s",
+      "playtime_seconds": 78936,
+      "has_dlc": true,
+      "equipment": {
+        "right_hand_1": {
+          "id": 12140914,
+          "name": "Cold Pickaxe +14"
+        },
+        "right_hand_2": {
+          "id": 1030113,
+          "name": "Heavy Misericorde +13"
+        },
+        "left_hand_1": {
+          "id": 32260000,
+          "name": "Golden Greatshield"
+        },
+        "left_hand_2": {
+          "id": 24060000,
+          "name": "Beast-Repellent Torch"
+        },
+        "head": {
+          "id": 1400000,
+          "name": "Black Hood"
+        },
+        "chest": {
+          "id": 930100,
+          "name": "Raptor's Black Feathers"
+        },
+        "arms": {
+          "id": 210200,
+          "name": "Briar Gauntlets"
+        },
+        "legs": {
+          "id": 1700300,
+          "name": "Godrick Soldier Greaves"
+        },
+        "talisman_1": {
+          "id": 1150,
+          "name": "Green Turtle Talisman"
+        },
+        "talisman_2": {
+          "id": 2130,
+          "name": "Axe Talisman"
+        },
+        "talisman_3": {
+          "id": 1031,
+          "name": "Arsenal Charm +1"
+        },
+        "talisman_4": {
+          "id": 2200,
+          "name": "Curved Sword Talisman"
         }
       },
       "requires_mod": false,
