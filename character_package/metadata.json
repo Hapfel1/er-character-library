@@ -1,68 +1,76 @@
 {
-  "name": "UseTheLfgCoop",
-  "level": 150,
-  "class": "Vagabond",
-  "body_type": "Type A",
+  "name": "rock",
+  "level": 87,
+  "class": "Wretch",
+  "body_type": "Type B",
   "stats": {
-    "vigor": 60,
+    "vigor": 29,
     "mind": 10,
-    "endurance": 34,
-    "strength": 60,
-    "dexterity": 40,
-    "intelligence": 9,
-    "faith": 9,
-    "arcane": 7
+    "endurance": 30,
+    "strength": 34,
+    "dexterity": 16,
+    "intelligence": 22,
+    "faith": 10,
+    "arcane": 15
   },
-  "max_hp": 1900,
+  "max_hp": 951,
   "max_fp": 78,
-  "max_stamina": 135,
+  "max_stamina": 130,
   "runes": 0,
-  "playtime_seconds": 31710,
-  "playtime": "8h 48m 30s",
+  "playtime_seconds": 78936,
+  "playtime": "21h 55m 36s",
   "ng_level": "NG",
-  "bosses_defeated": 0,
-  "graces_unlocked": 6,
+  "bosses_defeated": 40,
+  "graces_unlocked": 121,
   "ng_plus": 0,
   "equipment": {
     "right_hand_1": {
-      "id": 60510125,
-      "name": "Unknown Item (0x039B4FAD)"
+      "id": 12140914,
+      "name": "Unknown Item (0x00B94172)"
+    },
+    "right_hand_2": {
+      "id": 1030113,
+      "name": "Unknown Item (0x000FB7E1)"
     },
     "left_hand_1": {
-      "id": 60500125,
-      "name": "Unknown Item (0x039B289D)"
+      "id": 32260000,
+      "name": "Golden Greatshield"
+    },
+    "left_hand_2": {
+      "id": 24060000,
+      "name": "Beast-Repellent Torch"
     },
     "head": {
-      "id": 5160000,
-      "name": "Rakshasa Helm"
+      "id": 1400000,
+      "name": "Black Hood"
     },
     "chest": {
-      "id": 5230100,
-      "name": "Gravebird's Blackquill Armor"
+      "id": 930100,
+      "name": "Raptor's Black Feathers"
     },
     "arms": {
-      "id": 360200,
-      "name": "Fire Prelate Gauntlets"
+      "id": 210200,
+      "name": "Briar Gauntlets"
     },
     "legs": {
-      "id": 5253300,
-      "name": "Divine Bird Warrior Greaves"
+      "id": 1700300,
+      "name": "Godrick Soldier Greaves"
     },
     "talisman_1": {
-      "id": 8030,
-      "name": "Shattered Stone Talisman"
+      "id": 1150,
+      "name": "Green Turtle Talisman"
     },
     "talisman_2": {
-      "id": 2200,
-      "name": "Curved Sword Talisman"
+      "id": 2130,
+      "name": "Axe Talisman"
     },
     "talisman_3": {
-      "id": 1231,
-      "name": "Shard of Alexander"
+      "id": 1031,
+      "name": "Arsenal Charm +1"
     },
     "talisman_4": {
-      "id": 7030,
-      "name": "Two-Headed Turtle Talisman"
+      "id": 2200,
+      "name": "Curved Sword Talisman"
     }
   },
   "has_dlc": true
