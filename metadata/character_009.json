@@ -69,5 +69,13 @@
       "name": "Crimson Amber Medallion +2"
     }
   },
-  "has_dlc": true
+  "has_dlc": true,
+  "author": "Cameron",
+  "submitted_by": "YeetXxMeister",
+  "screenshots": {
+    "face_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/face/character_009.jpg",
+    "body_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/body/character_009.jpg",
+    "preview_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/preview/character_009.jpg",
+    "thumbnail_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/thumbs/character_009.jpg"
+  }
 }

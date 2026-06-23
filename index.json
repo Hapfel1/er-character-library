@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "last_updated": "2026-04-20T17:44:18.105Z",
+  "last_updated": "2026-06-23T21:11:16.330Z",
   "characters": [
     {
       "id": "character_000",
@@ -422,6 +422,92 @@
         "talisman_4": {
           "id": 8040,
           "name": "Two-Handed Sword Talisman"
+        }
+      },
+      "requires_mod": false,
+      "mod_info": null
+    },
+    {
+      "id": "character_009",
+      "name": "Cameron",
+      "author": "Cameron",
+      "description": "i like to smoke a lot",
+      "tags": [
+        "cigs"
+      ],
+      "erc_url": "characters/character_009.erc",
+      "metadata_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/metadata/character_009.json",
+      "screenshots": {
+        "face_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/face/character_009.jpg",
+        "body_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/body/character_009.jpg",
+        "preview_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/preview/character_009.jpg",
+        "thumbnail_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/thumbs/character_009.jpg"
+      },
+      "submitted_by": "YeetXxMeister",
+      "submitted_at": "2026-06-23T21:11:16.323Z",
+      "downloads": 0,
+      "likes": 0,
+      "level": 198,
+      "class": "Samurai",
+      "body_type": "Type B",
+      "stats": {
+        "vigor": 60,
+        "mind": 20,
+        "endurance": 60,
+        "strength": 56,
+        "dexterity": 15,
+        "intelligence": 12,
+        "faith": 46,
+        "arcane": 8
+      },
+      "ng_plus": 0,
+      "playtime": "133h 20m 3s",
+      "playtime_seconds": 480003,
+      "has_dlc": true,
+      "equipment": {
+        "right_hand_1": {
+          "id": 3550000,
+          "name": "Greatsword of Solitude"
+        },
+        "left_hand_1": {
+          "id": 32130025,
+          "name": "Fingerprint Stone Shield"
+        },
+        "left_hand_2": {
+          "id": 34090009,
+          "name": "Frenzied Flame Seal"
+        },
+        "head": {
+          "id": 1000000,
+          "name": "Haima Glintstone Crown"
+        },
+        "chest": {
+          "id": 5130100,
+          "name": "Armor of Solitude"
+        },
+        "arms": {
+          "id": 5130200,
+          "name": "Gauntlets of Solitude"
+        },
+        "legs": {
+          "id": 5130300,
+          "name": "Greaves of Solitude"
+        },
+        "talisman_1": {
+          "id": 1110,
+          "name": "Gold Scarab"
+        },
+        "talisman_2": {
+          "id": 1041,
+          "name": "Erdtree's Favor +1"
+        },
+        "talisman_3": {
+          "id": 1032,
+          "name": "Great-Jar's Arsenal"
+        },
+        "talisman_4": {
+          "id": 1002,
+          "name": "Crimson Amber Medallion +2"
         }
       },
       "requires_mod": false,
