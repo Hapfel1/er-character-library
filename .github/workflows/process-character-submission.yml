@@ -192,7 +192,7 @@ jobs:
 
             // Compute the next free ID from both the filesystem AND index.json,
             // taking the max of all sources to be safe.
-            function computeNextFreeId() {
+            async function computeNextFreeId() {
               let maxId = 0;
 
               // 1. Scan characters/ directory
