@@ -361,19 +361,19 @@ jobs:
           
           FACE_SOURCE=$(find character_package -name "face.*" | head -1)
           if [ -f "$FACE_SOURCE" ]; then
-            cp "$FACE_SOURCE" "screenshots/face/${char_id}$(echo $FACE_SOURCE | sed 's/.*\(\\..*\)$/\1/')"
+            cp "$FACE_SOURCE" "screenshots/face/${char_id}.${FACE_SOURCE##*.}"
             echo "✓ Copied face screenshot"
           fi
           
           BODY_SOURCE=$(find character_package -name "body.*" | head -1)
           if [ -f "$BODY_SOURCE" ]; then
-            cp "$BODY_SOURCE" "screenshots/body/${char_id}$(echo $BODY_SOURCE | sed 's/.*\(\\..*\)$/\1/')"
+            cp "$BODY_SOURCE" "screenshots/body/${char_id}.${BODY_SOURCE##*.}"
             echo "✓ Copied body screenshot"
           fi
           
           PREVIEW_SOURCE=$(find character_package -name "preview.*" | head -1)
           if [ -f "$PREVIEW_SOURCE" ]; then
-            cp "$PREVIEW_SOURCE" "screenshots/preview/${char_id}$(echo $PREVIEW_SOURCE | sed 's/.*\(\\..*\)$/\1/')"
+            cp "$PREVIEW_SOURCE" "screenshots/preview/${char_id}.${PREVIEW_SOURCE##*.}"
             echo "✓ Copied preview screenshot"
           fi
       
