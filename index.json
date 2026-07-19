@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "last_updated": "2026-06-23T21:11:16.330Z",
+  "last_updated": "2026-07-19T20:10:32.967Z",
   "characters": [
     {
       "id": "character_000",
@@ -512,6 +512,100 @@
       },
       "requires_mod": false,
       "mod_info": null
+    },
+    {
+      "id": "character_010",
+      "name": "Cross",
+      "author": "frogman",
+      "description": "Cool character for Elden Vins",
+      "tags": [
+        "**Stats:** Level 709 • Confessor"
+      ],
+      "erc_url": "characters/character_010.erc",
+      "metadata_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/metadata/character_010.json",
+      "screenshots": {
+        "face_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/face/character_010.jpg",
+        "body_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/body/character_010.jpg",
+        "preview_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/preview/character_010.jpg",
+        "thumbnail_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/thumbs/character_010.jpg"
+      },
+      "submitted_by": "pistolsaint333-art",
+      "submitted_at": "2026-07-19T20:10:32.959Z",
+      "downloads": 0,
+      "likes": 0,
+      "level": 709,
+      "class": "Confessor",
+      "body_type": "Type A",
+      "stats": {
+        "vigor": 99,
+        "mind": 99,
+        "endurance": 99,
+        "strength": 99,
+        "dexterity": 99,
+        "intelligence": 99,
+        "faith": 99,
+        "arcane": 99
+      },
+      "ng_plus": 0,
+      "playtime": "7h 7m 41s",
+      "playtime_seconds": 25661,
+      "has_dlc": true,
+      "equipment": {
+        "right_hand_1": {
+          "id": 9700010,
+          "name": "Unknown Weapon (ID: 9700010)"
+        },
+        "right_hand_2": {
+          "id": 67900010,
+          "name": "Unknown Weapon (ID: 67900010)"
+        },
+        "right_hand_3": {
+          "id": 2550010,
+          "name": "Sword of Light"
+        },
+        "left_hand_1": {
+          "id": 34080010,
+          "name": "Dragon Communion Seal"
+        },
+        "head": {
+          "id": 5272000,
+          "name": "Circlet of Light"
+        },
+        "chest": {
+          "id": 5260100,
+          "name": "Rellana's Armor"
+        },
+        "arms": {
+          "id": 5260200,
+          "name": "Rellana's Gloves"
+        },
+        "legs": {
+          "id": 5260300,
+          "name": "Rellana's Greaves"
+        },
+        "talisman_1": {
+          "id": 1250,
+          "name": "Millicent's Prosthesis"
+        },
+        "talisman_2": {
+          "id": 2180,
+          "name": "Claw Talisman"
+        },
+        "talisman_3": {
+          "id": 1231,
+          "name": "Shard of Alexander"
+        },
+        "talisman_4": {
+          "id": 3090,
+          "name": "Godfrey Icon"
+        }
+      },
+      "requires_mod": true,
+      "mod_info": {
+        "name": "Elden Vins",
+        "version": "v.1.8.1",
+        "required": true
+      }
     }
   ]
 }
