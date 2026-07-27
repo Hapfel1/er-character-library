@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "last_updated": "2026-07-19T20:10:32.967Z",
+  "last_updated": "2026-07-27T17:10:47.851Z",
   "characters": [
     {
       "id": "character_000",
@@ -604,6 +604,92 @@
       "mod_info": {
         "name": "Elden Vins",
         "version": "v.1.8.1",
+        "required": true
+      }
+    },
+    {
+      "id": "character_011",
+      "name": "Wayne Dunlap",
+      "author": "Maxfox",
+      "description": "If i ever see my family again I am going to tell them about Wayne.",
+      "tags": [
+        "**Stats:** Level 159 • Frenzied Zealot"
+      ],
+      "erc_url": "characters/character_011.erc",
+      "metadata_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/metadata/character_011.json",
+      "screenshots": {
+        "face_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/face/character_011.jpg",
+        "body_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/body/character_011.jpg",
+        "preview_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/preview/character_011.jpg",
+        "thumbnail_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/thumbs/character_011.jpg"
+      },
+      "submitted_by": "MaxfoxREAL",
+      "submitted_at": "2026-07-27T17:10:47.838Z",
+      "downloads": 0,
+      "likes": 0,
+      "level": 159,
+      "class": "Frenzied Zealot",
+      "body_type": "Type A",
+      "stats": {
+        "vigor": 50,
+        "mind": 18,
+        "endurance": 24,
+        "strength": 20,
+        "dexterity": 22,
+        "intelligence": 48,
+        "faith": 48,
+        "arcane": 8
+      },
+      "ng_plus": 0,
+      "playtime": "34h 53m 48s",
+      "playtime_seconds": 125628,
+      "has_dlc": true,
+      "equipment": {
+        "right_hand_1": {
+          "id": 7170009,
+          "name": "Godskin Flayer"
+        },
+        "left_hand_1": {
+          "id": 34010009,
+          "name": "Godslayer's Seal"
+        },
+        "head": {
+          "id": 760000,
+          "name": "Maliketh's Helm"
+        },
+        "chest": {
+          "id": 760100,
+          "name": "Maliketh's Armor"
+        },
+        "arms": {
+          "id": 760200,
+          "name": "Maliketh's Gauntlets"
+        },
+        "legs": {
+          "id": 760300,
+          "name": "Maliketh's Greaves"
+        },
+        "talisman_1": {
+          "id": 1230,
+          "name": "Warrior Jar Shard"
+        },
+        "talisman_2": {
+          "id": 2080,
+          "name": "Winged Sword Insignia"
+        },
+        "talisman_3": {
+          "id": 3050,
+          "name": "Flock's Canvas Talisman"
+        },
+        "talisman_4": {
+          "id": 3090,
+          "name": "Godfrey Icon"
+        }
+      },
+      "requires_mod": true,
+      "mod_info": {
+        "name": "Convergence",
+        "version": "",
         "required": true
       }
     }
