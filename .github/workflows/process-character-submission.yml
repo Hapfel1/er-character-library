@@ -359,22 +359,31 @@ jobs:
             echo "⚠ No metadata.json found"
           fi
           
-          FACE_SOURCE=$(find character_package -name "face.*" | head -1)
+          FACE_SOURCE=$(find character_package -iname "face.*" | sort | head -1)
           if [ -f "$FACE_SOURCE" ]; then
-            cp "$FACE_SOURCE" "screenshots/face/${char_id}.${FACE_SOURCE##*.}"
-            echo "✓ Copied face screenshot"
+            FACE_EXT="${FACE_SOURCE##*.}"
+            FACE_EXT="${FACE_EXT,,}"
+            cp "$FACE_SOURCE" "screenshots/face/${char_id}.${FACE_EXT}"
+            echo "face_ext=${FACE_EXT}" >> $GITHUB_ENV
+            echo "✓ Copied face screenshot (.${FACE_EXT})"
           fi
           
-          BODY_SOURCE=$(find character_package -name "body.*" | head -1)
+          BODY_SOURCE=$(find character_package -iname "body.*" | sort | head -1)
           if [ -f "$BODY_SOURCE" ]; then
-            cp "$BODY_SOURCE" "screenshots/body/${char_id}.${BODY_SOURCE##*.}"
-            echo "✓ Copied body screenshot"
+            BODY_EXT="${BODY_SOURCE##*.}"
+            BODY_EXT="${BODY_EXT,,}"
+            cp "$BODY_SOURCE" "screenshots/body/${char_id}.${BODY_EXT}"
+            echo "body_ext=${BODY_EXT}" >> $GITHUB_ENV
+            echo "✓ Copied body screenshot (.${BODY_EXT})"
           fi
           
-          PREVIEW_SOURCE=$(find character_package -name "preview.*" | head -1)
+          PREVIEW_SOURCE=$(find character_package -iname "preview.*" | sort | head -1)
           if [ -f "$PREVIEW_SOURCE" ]; then
-            cp "$PREVIEW_SOURCE" "screenshots/preview/${char_id}.${PREVIEW_SOURCE##*.}"
-            echo "✓ Copied preview screenshot"
+            PREVIEW_EXT="${PREVIEW_SOURCE##*.}"
+            PREVIEW_EXT="${PREVIEW_EXT,,}"
+            cp "$PREVIEW_SOURCE" "screenshots/preview/${char_id}.${PREVIEW_EXT}"
+            echo "preview_ext=${PREVIEW_EXT}" >> $GITHUB_ENV
+            echo "✓ Copied preview screenshot (.${PREVIEW_EXT})"
           fi
       
       - name: Update metadata.json with author and screenshots
@@ -384,8 +393,12 @@ jobs:
           submitter="${{ github.event.issue.user.login }}"
           repo_name="${{ github.repository }}"
           
+          face_ext="${face_ext:-jpg}"
+          body_ext="${body_ext:-jpg}"
+          preview_ext="${preview_ext:-jpg}"
+          
           if [ -f "metadata/${char_id}.json" ]; then
-            NODE_CHAR_ID="$char_id" NODE_AUTHOR="$author" NODE_SUBMITTER="$submitter" NODE_REPO="$repo_name" node -e "const fs = require('fs'); const charId = process.env.NODE_CHAR_ID; const author = process.env.NODE_AUTHOR; const submitter = process.env.NODE_SUBMITTER; const baseUrl = 'https://raw.githubusercontent.com/' + process.env.NODE_REPO + '/main'; const metadataPath = 'metadata/' + charId + '.json'; const metadata = JSON.parse(fs.readFileSync(metadataPath, 'utf8')); metadata.author = author; metadata.submitted_by = submitter; metadata.screenshots = { face_url: baseUrl + '/screenshots/face/' + charId + '.jpg', body_url: baseUrl + '/screenshots/body/' + charId + '.jpg', preview_url: baseUrl + '/screenshots/preview/' + charId + '.jpg', thumbnail_url: baseUrl + '/screenshots/thumbs/' + charId + '.jpg' }; fs.writeFileSync(metadataPath, JSON.stringify(metadata, null, 2) + '\n'); console.log('Updated metadata.json with author and screenshot URLs');"
+            NODE_CHAR_ID="$char_id" NODE_AUTHOR="$author" NODE_SUBMITTER="$submitter" NODE_REPO="$repo_name" NODE_FACE_EXT="$face_ext" NODE_BODY_EXT="$body_ext" NODE_PREVIEW_EXT="$preview_ext" node -e "const fs = require('fs'); const charId = process.env.NODE_CHAR_ID; const author = process.env.NODE_AUTHOR; const submitter = process.env.NODE_SUBMITTER; const baseUrl = 'https://raw.githubusercontent.com/' + process.env.NODE_REPO + '/main'; const metadataPath = 'metadata/' + charId + '.json'; const metadata = JSON.parse(fs.readFileSync(metadataPath, 'utf8')); metadata.author = author; metadata.submitted_by = submitter; metadata.screenshots = { face_url: baseUrl + '/screenshots/face/' + charId + '.' + process.env.NODE_FACE_EXT, body_url: baseUrl + '/screenshots/body/' + charId + '.' + process.env.NODE_BODY_EXT, preview_url: baseUrl + '/screenshots/preview/' + charId + '.' + process.env.NODE_PREVIEW_EXT, thumbnail_url: baseUrl + '/screenshots/thumbs/' + charId + '.' + process.env.NODE_FACE_EXT }; fs.writeFileSync(metadataPath, JSON.stringify(metadata, null, 2) + '\n'); console.log('Updated metadata.json with author and screenshot URLs');"
           fi
       
       - name: Update index.json
@@ -415,6 +428,10 @@ jobs:
             const metadataPath = `metadata/${charId}.json`;
             const baseUrl = `https://raw.githubusercontent.com/${context.repo.owner}/${context.repo.repo}/main`;
             
+            const faceExt = process.env.face_ext || 'jpg';
+            const bodyExt = process.env.body_ext || 'jpg';
+            const previewExt = process.env.preview_ext || 'jpg';
+            
             let characterEntry = {
               id: charId,
               name: charName,
@@ -424,10 +441,10 @@ jobs:
               erc_url: `characters/${charId}.erc`,
               metadata_url: `${baseUrl}/metadata/${charId}.json`,
               screenshots: {
-                face_url: `${baseUrl}/screenshots/face/${charId}.jpg`,
-                body_url: `${baseUrl}/screenshots/body/${charId}.jpg`,
-                preview_url: `${baseUrl}/screenshots/preview/${charId}.jpg`,
-                thumbnail_url: `${baseUrl}/screenshots/thumbs/${charId}.jpg`
+                face_url: `${baseUrl}/screenshots/face/${charId}.${faceExt}`,
+                body_url: `${baseUrl}/screenshots/body/${charId}.${bodyExt}`,
+                preview_url: `${baseUrl}/screenshots/preview/${charId}.${previewExt}`,
+                thumbnail_url: `${baseUrl}/screenshots/thumbs/${charId}.${faceExt}`
               },
               submitted_by: context.payload.issue.user.login,
               submitted_at: new Date().toISOString(),
