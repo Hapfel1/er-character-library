@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "last_updated": "2026-07-27T17:10:47.851Z",
+  "last_updated": "2026-07-30T15:30:15.230Z",
   "characters": [
     {
       "id": "character_000",
@@ -684,6 +684,92 @@
         "talisman_4": {
           "id": 3090,
           "name": "Godfrey Icon"
+        }
+      },
+      "requires_mod": true,
+      "mod_info": {
+        "name": "Convergence",
+        "version": "",
+        "required": true
+      }
+    },
+    {
+      "id": "character_013",
+      "name": "Jeb The Depraved",
+      "author": "WoShoMama",
+      "description": "binmgus",
+      "tags": [
+        "**Stats:** Level 58 • Prisoner"
+      ],
+      "erc_url": "characters/character_013.erc",
+      "metadata_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/metadata/character_013.json",
+      "screenshots": {
+        "face_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/face/character_013.png",
+        "body_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/body/character_013.jpg",
+        "preview_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/preview/character_013.jpg",
+        "thumbnail_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/thumbs/character_013.png"
+      },
+      "submitted_by": "WoShoMama",
+      "submitted_at": "2026-07-30T15:30:15.223Z",
+      "downloads": 0,
+      "likes": 0,
+      "level": 58,
+      "class": "Prisoner",
+      "body_type": "Type B",
+      "stats": {
+        "vigor": 20,
+        "mind": 10,
+        "endurance": 11,
+        "strength": 20,
+        "dexterity": 20,
+        "intelligence": 25,
+        "faith": 16,
+        "arcane": 15
+      },
+      "ng_plus": 0,
+      "playtime": "9h 16m 19s",
+      "playtime_seconds": 33379,
+      "has_dlc": true,
+      "equipment": {
+        "right_hand_1": {
+          "id": 9030006,
+          "name": "Meteoric Ore Blade"
+        },
+        "left_hand_1": {
+          "id": 9060006,
+          "name": "Moonveil"
+        },
+        "head": {
+          "id": 831000,
+          "name": "Olivinus Glintstone Crown"
+        },
+        "chest": {
+          "id": 292100,
+          "name": "Nox Swordstress Armor"
+        },
+        "arms": {
+          "id": 1190200,
+          "name": "Starcaller Wraps"
+        },
+        "legs": {
+          "id": 590300,
+          "name": "All-Knowing Greaves"
+        },
+        "talisman_1": {
+          "id": 1060,
+          "name": "Starscourge Heirloom"
+        },
+        "talisman_2": {
+          "id": 1080,
+          "name": "Stargazer Heirloom"
+        },
+        "talisman_3": {
+          "id": 4003,
+          "name": "Dragoncrest Greatshield Talisman"
+        },
+        "talisman_4": {
+          "id": 4050,
+          "name": "Pearldrake Talisman"
         }
       },
       "requires_mod": true,
