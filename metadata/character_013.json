@@ -1,0 +1,91 @@
+{
+  "name": "Jeb The Depraved",
+  "level": 58,
+  "class": "Prisoner",
+  "body_type": "Type B",
+  "stats": {
+    "vigor": 20,
+    "mind": 10,
+    "endurance": 11,
+    "strength": 20,
+    "dexterity": 20,
+    "intelligence": 25,
+    "faith": 16,
+    "arcane": 15
+  },
+  "max_hp": 721,
+  "max_fp": 113,
+  "max_stamina": 101,
+  "runes": 9686,
+  "playtime_seconds": 33379,
+  "playtime": "9h 16m 19s",
+  "ng_level": "NG",
+  "bosses_defeated": 22,
+  "graces_unlocked": 65,
+  "ng_plus": 0,
+  "equipment": {
+    "right_hand_1": {
+      "id": 9030006,
+      "name": "Meteoric Ore Blade"
+    },
+    "left_hand_1": {
+      "id": 9060006,
+      "name": "Moonveil"
+    },
+    "head": {
+      "id": 831000,
+      "name": "Olivinus Glintstone Crown"
+    },
+    "chest": {
+      "id": 292100,
+      "name": "Nox Swordstress Armor"
+    },
+    "arms": {
+      "id": 1190200,
+      "name": "Starcaller Wraps"
+    },
+    "legs": {
+      "id": 590300,
+      "name": "All-Knowing Greaves"
+    },
+    "talisman_1": {
+      "id": 1060,
+      "name": "Starscourge Heirloom"
+    },
+    "talisman_2": {
+      "id": 1080,
+      "name": "Stargazer Heirloom"
+    },
+    "talisman_3": {
+      "id": 4003,
+      "name": "Dragoncrest Greatshield Talisman"
+    },
+    "talisman_4": {
+      "id": 4050,
+      "name": "Pearldrake Talisman"
+    }
+  },
+  "has_dlc": true,
+  "convergence": {
+    "convergence_detected": true,
+    "custom_items": {}
+  },
+  "overhaul_mod": {
+    "name": "Convergence",
+    "version": ""
+  },
+  "requires_mod": true,
+  "mod_info": {
+    "name": "Convergence",
+    "version": "",
+    "required": true
+  },
+  "author": "WoShoMama",
+  "submitted_by": "WoShoMama",
+  "screenshots": {
+    "face_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/face/character_013.png",
+    "body_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/body/character_013.jpg",
+    "preview_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/preview/character_013.jpg",
+    "thumbnail_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/thumbs/character_013.png"
+  }
+}
