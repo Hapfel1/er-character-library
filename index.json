@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "last_updated": "2026-07-30T15:30:15.230Z",
+  "last_updated": "2026-07-30T19:26:06.575Z",
   "characters": [
     {
       "id": "character_000",
@@ -776,6 +776,100 @@
       "mod_info": {
         "name": "Convergence",
         "version": "",
+        "required": true
+      }
+    },
+    {
+      "id": "character_014",
+      "name": "FairEnough",
+      "author": "ItsGrits",
+      "description": "The Tankiest Tank That Ever Tanked, can take punishment and dish it back, staggers most bosses in 1-3 strikes and boast a physical absorbtion at 70% give or take unbuffed, equiped with fingerprint greatshield that has 100 guard boost which means no stamina is used when guarding",
+      "tags": [
+        "Tank"
+      ],
+      "erc_url": "characters/character_014.erc",
+      "metadata_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/metadata/character_014.json",
+      "screenshots": {
+        "face_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/face/character_014.png",
+        "body_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/body/character_014.png",
+        "preview_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/preview/character_014.png",
+        "thumbnail_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/thumbs/character_014.png"
+      },
+      "submitted_by": "ItsGrits",
+      "submitted_at": "2026-07-30T19:26:06.565Z",
+      "downloads": 0,
+      "likes": 0,
+      "level": 316,
+      "class": "Servant of Rot",
+      "body_type": "Type A",
+      "stats": {
+        "vigor": 99,
+        "mind": 48,
+        "endurance": 99,
+        "strength": 99,
+        "dexterity": 18,
+        "intelligence": 8,
+        "faith": 12,
+        "arcane": 12
+      },
+      "ng_plus": 0,
+      "playtime": "40h 48m 15s",
+      "playtime_seconds": 146895,
+      "has_dlc": true,
+      "equipment": {
+        "right_hand_1": {
+          "id": 11020012,
+          "name": "Leaden Maul"
+        },
+        "right_hand_2": {
+          "id": 15090015,
+          "name": "Axe Of Rust"
+        },
+        "right_hand_3": {
+          "id": 42500015,
+          "name": "Igon's Greatbow"
+        },
+        "left_hand_1": {
+          "id": 32130015,
+          "name": "Fingerprint Stone Shield"
+        },
+        "head": {
+          "id": 140000,
+          "name": "Bull-Goat Helm"
+        },
+        "chest": {
+          "id": 140100,
+          "name": "Bull-Goat Armor"
+        },
+        "arms": {
+          "id": 140200,
+          "name": "Bull-Goat Gauntlets"
+        },
+        "legs": {
+          "id": 140300,
+          "name": "Bull-Goat Greaves"
+        },
+        "talisman_1": {
+          "id": 4002,
+          "name": "Dragoncrest Shield Talisman +2"
+        },
+        "talisman_2": {
+          "id": 5020,
+          "name": "Blessed Dew Talisman"
+        },
+        "talisman_3": {
+          "id": 4090,
+          "name": "Ritual Shield Talisman"
+        },
+        "talisman_4": {
+          "id": 9030,
+          "name": "Jewel of the Reckless"
+        }
+      },
+      "requires_mod": true,
+      "mod_info": {
+        "name": "Convergence",
+        "version": "3.0",
         "required": true
       }
     }

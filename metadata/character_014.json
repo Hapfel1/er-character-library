@@ -1,0 +1,99 @@
+{
+  "name": "GiveItToMeDaddy",
+  "level": 316,
+  "class": "Servant of Rot",
+  "body_type": "Type A",
+  "stats": {
+    "vigor": 99,
+    "mind": 48,
+    "endurance": 99,
+    "strength": 99,
+    "dexterity": 18,
+    "intelligence": 8,
+    "faith": 12,
+    "arcane": 12
+  },
+  "max_hp": 2000,
+  "max_fp": 290,
+  "max_stamina": 170,
+  "runes": 903004886,
+  "playtime_seconds": 146895,
+  "playtime": "40h 48m 15s",
+  "ng_level": "NG",
+  "bosses_defeated": 58,
+  "graces_unlocked": 110,
+  "ng_plus": 0,
+  "equipment": {
+    "right_hand_1": {
+      "id": 11020012,
+      "name": "Leaden Maul"
+    },
+    "right_hand_2": {
+      "id": 15090015,
+      "name": "Axe Of Rust"
+    },
+    "right_hand_3": {
+      "id": 42500015,
+      "name": "Igon's Greatbow"
+    },
+    "left_hand_1": {
+      "id": 32130015,
+      "name": "Fingerprint Stone Shield"
+    },
+    "head": {
+      "id": 140000,
+      "name": "Bull-Goat Helm"
+    },
+    "chest": {
+      "id": 140100,
+      "name": "Bull-Goat Armor"
+    },
+    "arms": {
+      "id": 140200,
+      "name": "Bull-Goat Gauntlets"
+    },
+    "legs": {
+      "id": 140300,
+      "name": "Bull-Goat Greaves"
+    },
+    "talisman_1": {
+      "id": 4002,
+      "name": "Dragoncrest Shield Talisman +2"
+    },
+    "talisman_2": {
+      "id": 5020,
+      "name": "Blessed Dew Talisman"
+    },
+    "talisman_3": {
+      "id": 4090,
+      "name": "Ritual Shield Talisman"
+    },
+    "talisman_4": {
+      "id": 9030,
+      "name": "Jewel of the Reckless"
+    }
+  },
+  "has_dlc": true,
+  "convergence": {
+    "convergence_detected": true,
+    "custom_items": {}
+  },
+  "overhaul_mod": {
+    "name": "Convergence",
+    "version": "3.0"
+  },
+  "requires_mod": true,
+  "mod_info": {
+    "name": "Convergence",
+    "version": "3.0",
+    "required": true
+  },
+  "author": "ItsGrits",
+  "submitted_by": "ItsGrits",
+  "screenshots": {
+    "face_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/face/character_014.png",
+    "body_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/body/character_014.png",
+    "preview_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/preview/character_014.png",
+    "thumbnail_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/thumbs/character_014.png"
+  }
+}
