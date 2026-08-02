@@ -1,0 +1,91 @@
+{
+  "name": "Faye",
+  "level": 185,
+  "class": "Servant of Rot",
+  "body_type": "Type A",
+  "stats": {
+    "vigor": 60,
+    "mind": 23,
+    "endurance": 13,
+    "strength": 14,
+    "dexterity": 18,
+    "intelligence": 8,
+    "faith": 75,
+    "arcane": 53
+  },
+  "max_hp": 1500,
+  "max_fp": 165,
+  "max_stamina": 101,
+  "runes": 1012930,
+  "playtime_seconds": 108098,
+  "playtime": "30h 1m 38s",
+  "ng_level": "NG",
+  "bosses_defeated": 123,
+  "graces_unlocked": 234,
+  "ng_plus": 0,
+  "equipment": {
+    "right_hand_1": {
+      "id": 21081915,
+      "name": "Star Fist"
+    },
+    "left_hand_2": {
+      "id": 34170014,
+      "name": "Seal of Rot"
+    },
+    "head": {
+      "id": 770000,
+      "name": "Malenia's Winged Helm"
+    },
+    "chest": {
+      "id": 770100,
+      "name": "Malenia's Armor"
+    },
+    "arms": {
+      "id": 770200,
+      "name": "Malenia's Gauntlet"
+    },
+    "legs": {
+      "id": 770300,
+      "name": "Malenia's Greaves"
+    },
+    "talisman_1": {
+      "id": 1060,
+      "name": "Starscourge Heirloom"
+    },
+    "talisman_2": {
+      "id": 1040,
+      "name": "Erdtree's Favor"
+    },
+    "talisman_3": {
+      "id": 3020,
+      "name": "Primordial Pumice Fragment"
+    },
+    "talisman_4": {
+      "id": 3030,
+      "name": "Primordial Glass Shard"
+    }
+  },
+  "has_dlc": true,
+  "convergence": {
+    "convergence_detected": true,
+    "custom_items": {}
+  },
+  "overhaul_mod": {
+    "name": "Convergence",
+    "version": ""
+  },
+  "requires_mod": true,
+  "mod_info": {
+    "name": "Convergence",
+    "version": "",
+    "required": true
+  },
+  "author": "Slime",
+  "submitted_by": "Slimesniper",
+  "screenshots": {
+    "face_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/face/character_016.png",
+    "body_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/body/character_016.png",
+    "preview_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/preview/character_016.jpg",
+    "thumbnail_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/thumbs/character_016.png"
+  }
+}
