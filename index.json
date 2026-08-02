@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "last_updated": "2026-07-30T19:26:06.575Z",
+  "last_updated": "2026-08-02T12:37:59.027Z",
   "characters": [
     {
       "id": "character_000",
@@ -870,6 +870,92 @@
       "mod_info": {
         "name": "Convergence",
         "version": "3.0",
+        "required": true
+      }
+    },
+    {
+      "id": "character_015",
+      "name": "Grundle",
+      "author": "Bord",
+      "description": "Character for friend, lots of items and pretty stacked if anyone cares",
+      "tags": [
+        "**Stats:** Level 120 • Prisoner"
+      ],
+      "erc_url": "characters/character_015.erc",
+      "metadata_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/metadata/character_015.json",
+      "screenshots": {
+        "face_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/face/character_015.png",
+        "body_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/body/character_015.png",
+        "preview_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/preview/character_015.jpg",
+        "thumbnail_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/thumbs/character_015.png"
+      },
+      "submitted_by": "Bordddd",
+      "submitted_at": "2026-08-02T12:37:59.019Z",
+      "downloads": 0,
+      "likes": 0,
+      "level": 120,
+      "class": "Prisoner",
+      "body_type": "Type A",
+      "stats": {
+        "vigor": 30,
+        "mind": 10,
+        "endurance": 10,
+        "strength": 32,
+        "dexterity": 31,
+        "intelligence": 66,
+        "faith": 10,
+        "arcane": 10
+      },
+      "ng_plus": 0,
+      "playtime": "30h 45m 29s",
+      "playtime_seconds": 110729,
+      "has_dlc": true,
+      "equipment": {
+        "right_hand_1": {
+          "id": 21020008,
+          "name": "Daergraf’s Opus"
+        },
+        "left_hand_1": {
+          "id": 33300004,
+          "name": "Ranni's Staff"
+        },
+        "head": {
+          "id": 1110000,
+          "name": "Octopus Head"
+        },
+        "chest": {
+          "id": 940100,
+          "name": "Eccentric's Armor"
+        },
+        "arms": {
+          "id": 5250200,
+          "name": "Horned Warrior Gauntlets"
+        },
+        "legs": {
+          "id": 5200300,
+          "name": "Death Knight Greaves"
+        },
+        "talisman_1": {
+          "id": 7000,
+          "name": "Crimson Amber Medallion +3"
+        },
+        "talisman_2": {
+          "id": 1080,
+          "name": "Stargazer Heirloom"
+        },
+        "talisman_3": {
+          "id": 4090,
+          "name": "Ritual Shield Talisman"
+        },
+        "talisman_4": {
+          "id": 1040,
+          "name": "Erdtree's Favor"
+        }
+      },
+      "requires_mod": true,
+      "mod_info": {
+        "name": "Convergence",
+        "version": "",
         "required": true
       }
     }

@@ -1,0 +1,91 @@
+{
+  "name": "Grundle",
+  "level": 120,
+  "class": "Prisoner",
+  "body_type": "Type A",
+  "stats": {
+    "vigor": 30,
+    "mind": 10,
+    "endurance": 10,
+    "strength": 32,
+    "dexterity": 31,
+    "intelligence": 66,
+    "faith": 10,
+    "arcane": 10
+  },
+  "max_hp": 960,
+  "max_fp": 102,
+  "max_stamina": 106,
+  "runes": 13297,
+  "playtime_seconds": 110729,
+  "playtime": "30h 45m 29s",
+  "ng_level": "NG",
+  "bosses_defeated": 52,
+  "graces_unlocked": 112,
+  "ng_plus": 0,
+  "equipment": {
+    "right_hand_1": {
+      "id": 21020008,
+      "name": "Daergraf’s Opus"
+    },
+    "left_hand_1": {
+      "id": 33300004,
+      "name": "Ranni's Staff"
+    },
+    "head": {
+      "id": 1110000,
+      "name": "Octopus Head"
+    },
+    "chest": {
+      "id": 940100,
+      "name": "Eccentric's Armor"
+    },
+    "arms": {
+      "id": 5250200,
+      "name": "Horned Warrior Gauntlets"
+    },
+    "legs": {
+      "id": 5200300,
+      "name": "Death Knight Greaves"
+    },
+    "talisman_1": {
+      "id": 7000,
+      "name": "Crimson Amber Medallion +3"
+    },
+    "talisman_2": {
+      "id": 1080,
+      "name": "Stargazer Heirloom"
+    },
+    "talisman_3": {
+      "id": 4090,
+      "name": "Ritual Shield Talisman"
+    },
+    "talisman_4": {
+      "id": 1040,
+      "name": "Erdtree's Favor"
+    }
+  },
+  "has_dlc": true,
+  "convergence": {
+    "convergence_detected": true,
+    "custom_items": {}
+  },
+  "overhaul_mod": {
+    "name": "Convergence",
+    "version": ""
+  },
+  "requires_mod": true,
+  "mod_info": {
+    "name": "Convergence",
+    "version": "",
+    "required": true
+  },
+  "author": "Bord",
+  "submitted_by": "Bordddd",
+  "screenshots": {
+    "face_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/face/character_015.png",
+    "body_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/body/character_015.png",
+    "preview_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/preview/character_015.jpg",
+    "thumbnail_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/thumbs/character_015.png"
+  }
+}
