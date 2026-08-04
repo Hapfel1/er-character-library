@@ -150,6 +150,7 @@ jobs:
         run: |
           curl -L "${{ steps.find_zip.outputs.zip_url }}" -o character.zip
           
+          rm -rf character_package
           mkdir -p character_package
           cd character_package
           unzip -oq ../character.zip
@@ -359,7 +360,7 @@ jobs:
             echo "⚠ No metadata.json found"
           fi
           
-          FACE_SOURCE=$(find character_package -iname "face.*" | sort | head -1)
+          FACE_SOURCE=$(find character_package -name "face.*" | head -1)
           if [ -f "$FACE_SOURCE" ]; then
             FACE_EXT="${FACE_SOURCE##*.}"
             FACE_EXT="${FACE_EXT,,}"
@@ -368,7 +369,7 @@ jobs:
             echo "✓ Copied face screenshot (.${FACE_EXT})"
           fi
           
-          BODY_SOURCE=$(find character_package -iname "body.*" | sort | head -1)
+          BODY_SOURCE=$(find character_package -name "body.*" | head -1)
           if [ -f "$BODY_SOURCE" ]; then
             BODY_EXT="${BODY_SOURCE##*.}"
             BODY_EXT="${BODY_EXT,,}"
@@ -377,7 +378,7 @@ jobs:
             echo "✓ Copied body screenshot (.${BODY_EXT})"
           fi
           
-          PREVIEW_SOURCE=$(find character_package -iname "preview.*" | sort | head -1)
+          PREVIEW_SOURCE=$(find character_package -name "preview.*" | head -1)
           if [ -f "$PREVIEW_SOURCE" ]; then
             PREVIEW_EXT="${PREVIEW_SOURCE##*.}"
             PREVIEW_EXT="${PREVIEW_EXT,,}"
@@ -387,12 +388,12 @@ jobs:
           fi
       
       - name: Update metadata.json with author and screenshots
+        env:
+          char_id: ${{ steps.gen_id.outputs.character_id }}
+          author: ${{ steps.issue_details.outputs.author }}
+          submitter: ${{ github.event.issue.user.login }}
+          repo_name: ${{ github.repository }}
         run: |
-          char_id="${{ steps.gen_id.outputs.character_id }}"
-          author="${{ steps.issue_details.outputs.author }}"
-          submitter="${{ github.event.issue.user.login }}"
-          repo_name="${{ github.repository }}"
-          
           face_ext="${face_ext:-jpg}"
           body_ext="${body_ext:-jpg}"
           preview_ext="${preview_ext:-jpg}"
@@ -404,16 +405,22 @@ jobs:
       - name: Update index.json
         id: update_index
         uses: actions/github-script@v7
+        env:
+          char_id: ${{ steps.gen_id.outputs.character_id }}
+          char_name: ${{ steps.issue_details.outputs.char_name }}
+          char_author: ${{ steps.issue_details.outputs.author }}
+          char_description: ${{ steps.issue_details.outputs.description }}
+          char_tags: ${{ steps.issue_details.outputs.tags }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const fs = require('fs');
             
-            const charId = '${{ steps.gen_id.outputs.character_id }}';
-            const charName = '${{ steps.issue_details.outputs.char_name }}';
-            const character_author = '${{ steps.issue_details.outputs.author }}';
-            const character_description = '${{ steps.issue_details.outputs.description }}';
-            const character_tags = JSON.parse('${{ steps.issue_details.outputs.tags }}');
+            const charId = process.env.char_id;
+            const charName = process.env.char_name;
+            const character_author = process.env.char_author;
+            const character_description = process.env.char_description;
+            const character_tags = JSON.parse(process.env.char_tags);
             
             const indexPath = 'index.json';
             let index = JSON.parse(fs.readFileSync(indexPath, 'utf8'));
