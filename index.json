@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "last_updated": "2026-08-02T12:39:58.969Z",
+  "last_updated": "2026-08-04T17:39:53.084Z",
   "characters": [
     {
       "id": "character_000",
@@ -1042,6 +1042,77 @@
       "mod_info": {
         "name": "Convergence",
         "version": "",
+        "required": true
+      }
+    },
+    {
+      "id": "character_017",
+      "name": "Master Voidspark",
+      "author": "Lord Allheaven",
+      "description": "Original character based on the novel I'm writing.",
+      "tags": [
+        "dragon cultist",
+        "convergence"
+      ],
+      "erc_url": "characters/character_017.erc",
+      "metadata_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/metadata/character_017.json",
+      "screenshots": {
+        "face_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/face/character_017.jpg",
+        "body_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/body/character_017.jpg",
+        "preview_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/preview/character_017.jpg",
+        "thumbnail_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/thumbs/character_017.jpg"
+      },
+      "submitted_by": "lordallheaven",
+      "submitted_at": "2026-08-04T17:39:53.078Z",
+      "downloads": 0,
+      "likes": 0,
+      "level": 150,
+      "class": "Dragon Cultist",
+      "body_type": "Type B",
+      "stats": {
+        "vigor": 60,
+        "mind": 40,
+        "endurance": 23,
+        "strength": 20,
+        "dexterity": 20,
+        "intelligence": 6,
+        "faith": 54,
+        "arcane": 6
+      },
+      "ng_plus": 0,
+      "playtime": "31h 44m 0s",
+      "playtime_seconds": 114240,
+      "has_dlc": true,
+      "equipment": {
+        "right_hand_1": {
+          "id": 16090010,
+          "name": "Bolt of Gransax"
+        },
+        "left_hand_1": {
+          "id": 34120010,
+          "name": "Dragon Cult Seal"
+        },
+        "talisman_1": {
+          "id": 8190,
+          "name": "Beloved Stardust"
+        },
+        "talisman_2": {
+          "id": 9190,
+          "name": "Jewel of the Ancients"
+        },
+        "talisman_3": {
+          "id": 2013,
+          "name": "Scale of Gransax"
+        },
+        "talisman_4": {
+          "id": 2010,
+          "name": "Lightning Scorpion Charm"
+        }
+      },
+      "requires_mod": true,
+      "mod_info": {
+        "name": "Convergence",
+        "version": "3.0.1.2",
         "required": true
       }
     }
