@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "last_updated": "2026-08-04T17:39:53.084Z",
+  "last_updated": "2026-08-10T12:25:33.752Z",
   "characters": [
     {
       "id": "character_000",
@@ -1115,6 +1115,80 @@
         "version": "3.0.1.2",
         "required": true
       }
+    },
+    {
+      "id": "character_018",
+      "name": "albqn",
+      "author": "albxn",
+      "description": "my good shi",
+      "tags": [
+        "**Stats:** Level 229 • Samurai"
+      ],
+      "erc_url": "characters/character_018.erc",
+      "metadata_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/metadata/character_018.json",
+      "screenshots": {
+        "face_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/face/character_018.jpg",
+        "body_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/body/character_018.jpg",
+        "preview_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/preview/character_018.png",
+        "thumbnail_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/thumbs/character_018.jpg"
+      },
+      "submitted_by": "SwiftSpeed01",
+      "submitted_at": "2026-08-10T12:25:33.745Z",
+      "downloads": 0,
+      "likes": 0,
+      "level": 229,
+      "class": "Samurai",
+      "body_type": "Type B",
+      "stats": {
+        "vigor": 60,
+        "mind": 20,
+        "endurance": 40,
+        "strength": 12,
+        "dexterity": 60,
+        "intelligence": 9,
+        "faith": 8,
+        "arcane": 99
+      },
+      "ng_plus": 0,
+      "playtime": "112h 26m 38s",
+      "playtime_seconds": 404798,
+      "has_dlc": true,
+      "equipment": {
+        "right_hand_1": {
+          "id": 5041125,
+          "name": "Antspur Rapier"
+        },
+        "head": {
+          "id": 680000,
+          "name": "White Mask"
+        },
+        "arms": {
+          "id": 5160200,
+          "name": "Rakshasa Gauntlets"
+        },
+        "legs": {
+          "id": 5160300,
+          "name": "Rakshasa Greaves"
+        },
+        "talisman_1": {
+          "id": 1032,
+          "name": "Great-Jar's Arsenal"
+        },
+        "talisman_2": {
+          "id": 1231,
+          "name": "Shard of Alexander"
+        },
+        "talisman_3": {
+          "id": 1250,
+          "name": "Millicent's Prosthesis"
+        },
+        "talisman_4": {
+          "id": 2081,
+          "name": "Rotten Winged Sword Insignia"
+        }
+      },
+      "requires_mod": false,
+      "mod_info": null
     }
   ]
 }
