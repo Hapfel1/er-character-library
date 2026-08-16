@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "last_updated": "2026-08-10T12:25:33.752Z",
+  "last_updated": "2026-08-16T10:19:58.048Z",
   "characters": [
     {
       "id": "character_000",
@@ -1185,6 +1185,83 @@
         "talisman_4": {
           "id": 2081,
           "name": "Rotten Winged Sword Insignia"
+        }
+      },
+      "requires_mod": false,
+      "mod_info": null
+    },
+    {
+      "id": "character_019",
+      "name": "PVP Ready",
+      "author": "Vile",
+      "description": "Optimised Tailsmans, Minimalist armour set, Empty Weapons to use for sorting your inventory management via PVP Helper",
+      "tags": [
+        "Invader",
+        "Invasion",
+        "Redbadman",
+        "Terror"
+      ],
+      "erc_url": "characters/character_019.erc",
+      "metadata_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/metadata/character_019.json",
+      "screenshots": {
+        "face_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/face/character_019.png",
+        "body_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/body/character_019.png",
+        "preview_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/preview/character_019.jpg",
+        "thumbnail_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/thumbs/character_019.png"
+      },
+      "submitted_by": "VinnieTheVile",
+      "submitted_at": "2026-08-16T10:19:58.041Z",
+      "downloads": 0,
+      "likes": 0,
+      "level": 150,
+      "class": "Vagabond",
+      "body_type": "Type A",
+      "stats": {
+        "vigor": 57,
+        "mind": 10,
+        "endurance": 43,
+        "strength": 70,
+        "dexterity": 18,
+        "intelligence": 15,
+        "faith": 9,
+        "arcane": 7
+      },
+      "ng_plus": 0,
+      "playtime": "43h 38m 10s",
+      "playtime_seconds": 157090,
+      "has_dlc": true,
+      "equipment": {
+        "head": {
+          "id": 5130000,
+          "name": "Helm of Solitude"
+        },
+        "chest": {
+          "id": 5130100,
+          "name": "Armor of Solitude"
+        },
+        "arms": {
+          "id": 5130200,
+          "name": "Gauntlets of Solitude"
+        },
+        "legs": {
+          "id": 5130300,
+          "name": "Greaves of Solitude"
+        },
+        "talisman_1": {
+          "id": 8040,
+          "name": "Two-Handed Sword Talisman"
+        },
+        "talisman_2": {
+          "id": 2060,
+          "name": "Spear Talisman"
+        },
+        "talisman_3": {
+          "id": 2081,
+          "name": "Rotten Winged Sword Insignia"
+        },
+        "talisman_4": {
+          "id": 1032,
+          "name": "Great-Jar's Arsenal"
         }
       },
       "requires_mod": false,
