@@ -1,0 +1,69 @@
+{
+  "name": "Fists of Kefka",
+  "level": 150,
+  "class": "Vagabond",
+  "body_type": "Type A",
+  "stats": {
+    "vigor": 57,
+    "mind": 10,
+    "endurance": 43,
+    "strength": 70,
+    "dexterity": 18,
+    "intelligence": 15,
+    "faith": 9,
+    "arcane": 7
+  },
+  "max_hp": 1853,
+  "max_fp": 78,
+  "max_stamina": 146,
+  "runes": 0,
+  "playtime_seconds": 157090,
+  "playtime": "43h 38m 10s",
+  "ng_level": "NG",
+  "bosses_defeated": 9,
+  "graces_unlocked": 302,
+  "ng_plus": 0,
+  "equipment": {
+    "head": {
+      "id": 5130000,
+      "name": "Helm of Solitude"
+    },
+    "chest": {
+      "id": 5130100,
+      "name": "Armor of Solitude"
+    },
+    "arms": {
+      "id": 5130200,
+      "name": "Gauntlets of Solitude"
+    },
+    "legs": {
+      "id": 5130300,
+      "name": "Greaves of Solitude"
+    },
+    "talisman_1": {
+      "id": 8040,
+      "name": "Two-Handed Sword Talisman"
+    },
+    "talisman_2": {
+      "id": 2060,
+      "name": "Spear Talisman"
+    },
+    "talisman_3": {
+      "id": 2081,
+      "name": "Rotten Winged Sword Insignia"
+    },
+    "talisman_4": {
+      "id": 1032,
+      "name": "Great-Jar's Arsenal"
+    }
+  },
+  "has_dlc": true,
+  "author": "Vile",
+  "submitted_by": "VinnieTheVile",
+  "screenshots": {
+    "face_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/face/character_019.png",
+    "body_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/body/character_019.png",
+    "preview_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/preview/character_019.jpg",
+    "thumbnail_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/thumbs/character_019.png"
+  }
+}
