@@ -1,0 +1,91 @@
+{
+  "name": "Rellana",
+  "level": 279,
+  "class": "Glint Sorcerer",
+  "body_type": "Type A",
+  "stats": {
+    "vigor": 9,
+    "mind": 15,
+    "endurance": 18,
+    "strength": 80,
+    "dexterity": 80,
+    "intelligence": 99,
+    "faith": 50,
+    "arcane": 7
+  },
+  "max_hp": 550,
+  "max_fp": 150,
+  "max_stamina": 110,
+  "runes": 0,
+  "playtime_seconds": 154,
+  "playtime": "0h 2m 34s",
+  "ng_level": "NG",
+  "bosses_defeated": 0,
+  "graces_unlocked": 0,
+  "ng_plus": 0,
+  "equipment": {
+    "right_hand_1": {
+      "id": 67520010,
+      "name": "Rellana's Twin Blades"
+    },
+    "left_hand_1": {
+      "id": 2530015,
+      "name": "Carian Sorcery Sword"
+    },
+    "head": {
+      "id": 5260000,
+      "name": "Rellana's Helm"
+    },
+    "chest": {
+      "id": 5260100,
+      "name": "Rellana's Armor"
+    },
+    "arms": {
+      "id": 5260200,
+      "name": "Rellana's Gloves"
+    },
+    "legs": {
+      "id": 5260300,
+      "name": "Rellana's Greaves"
+    },
+    "talisman_1": {
+      "id": 8220,
+      "name": "Rellana's Cameo"
+    },
+    "talisman_2": {
+      "id": 6020,
+      "name": "Carian Filigreed Crest"
+    },
+    "talisman_3": {
+      "id": 3001,
+      "name": "Graven-Mass Talisman"
+    },
+    "talisman_4": {
+      "id": 7090,
+      "name": "Spelldrake Talisman +3"
+    }
+  },
+  "has_dlc": true,
+  "convergence": {
+    "convergence_detected": true,
+    "custom_items": {}
+  },
+  "overhaul_mod": {
+    "name": "Convergence",
+    "version": "3.0.1"
+  },
+  "requires_mod": true,
+  "mod_info": {
+    "name": "Convergence",
+    "version": "3.0.1",
+    "required": true
+  },
+  "author": "happythehobo",
+  "submitted_by": "happythehobo",
+  "screenshots": {
+    "face_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/face/character_020.png",
+    "body_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/body/character_020.png",
+    "preview_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/preview/character_020.png",
+    "thumbnail_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/thumbs/character_020.png"
+  }
+}
