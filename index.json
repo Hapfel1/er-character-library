@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "last_updated": "2026-08-16T10:19:58.048Z",
+  "last_updated": "2026-08-18T14:24:32.904Z",
   "characters": [
     {
       "id": "character_000",
@@ -1266,6 +1266,92 @@
       },
       "requires_mod": false,
       "mod_info": null
+    },
+    {
+      "id": "character_020",
+      "name": "Rellana",
+      "author": "happythehobo",
+      "description": "Rellana, the Twin Moon Knight build. Adjusted for more lore-accurate stats and spells, but left with low HP/FP and Endurance (modified only for item load) for a challenge run. Carian Sorcery Sword is equipped as sorcery focus.",
+      "tags": [
+        "**Stats:** Level 279 • Glint Sorcerer"
+      ],
+      "erc_url": "characters/character_020.erc",
+      "metadata_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/metadata/character_020.json",
+      "screenshots": {
+        "face_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/face/character_020.png",
+        "body_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/body/character_020.png",
+        "preview_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/preview/character_020.png",
+        "thumbnail_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/thumbs/character_020.png"
+      },
+      "submitted_by": "happythehobo",
+      "submitted_at": "2026-08-18T14:24:32.896Z",
+      "downloads": 0,
+      "likes": 0,
+      "level": 279,
+      "class": "Glint Sorcerer",
+      "body_type": "Type A",
+      "stats": {
+        "vigor": 9,
+        "mind": 15,
+        "endurance": 18,
+        "strength": 80,
+        "dexterity": 80,
+        "intelligence": 99,
+        "faith": 50,
+        "arcane": 7
+      },
+      "ng_plus": 0,
+      "playtime": "0h 2m 34s",
+      "playtime_seconds": 154,
+      "has_dlc": true,
+      "equipment": {
+        "right_hand_1": {
+          "id": 67520010,
+          "name": "Rellana's Twin Blades"
+        },
+        "left_hand_1": {
+          "id": 2530015,
+          "name": "Carian Sorcery Sword"
+        },
+        "head": {
+          "id": 5260000,
+          "name": "Rellana's Helm"
+        },
+        "chest": {
+          "id": 5260100,
+          "name": "Rellana's Armor"
+        },
+        "arms": {
+          "id": 5260200,
+          "name": "Rellana's Gloves"
+        },
+        "legs": {
+          "id": 5260300,
+          "name": "Rellana's Greaves"
+        },
+        "talisman_1": {
+          "id": 8220,
+          "name": "Rellana's Cameo"
+        },
+        "talisman_2": {
+          "id": 6020,
+          "name": "Carian Filigreed Crest"
+        },
+        "talisman_3": {
+          "id": 3001,
+          "name": "Graven-Mass Talisman"
+        },
+        "talisman_4": {
+          "id": 7090,
+          "name": "Spelldrake Talisman +3"
+        }
+      },
+      "requires_mod": true,
+      "mod_info": {
+        "name": "Convergence",
+        "version": "3.0.1",
+        "required": true
+      }
     }
   ]
 }
