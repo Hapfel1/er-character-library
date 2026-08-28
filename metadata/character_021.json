@@ -1,0 +1,95 @@
+{
+  "name": "Shirley 2.0",
+  "level": 187,
+  "class": "Retainer",
+  "body_type": "Type A",
+  "stats": {
+    "vigor": 40,
+    "mind": 25,
+    "endurance": 25,
+    "strength": 25,
+    "dexterity": 25,
+    "intelligence": 53,
+    "faith": 53,
+    "arcane": 20
+  },
+  "max_hp": 1140,
+  "max_fp": 185,
+  "max_stamina": 128,
+  "runes": 3705,
+  "playtime_seconds": 22609,
+  "playtime": "6h 16m 49s",
+  "ng_level": "NG",
+  "bosses_defeated": 22,
+  "graces_unlocked": 43,
+  "ng_plus": 0,
+  "equipment": {
+    "right_hand_1": {
+      "id": 11193010,
+      "name": "Tricia's Pomander"
+    },
+    "right_hand_2": {
+      "id": 9090014,
+      "name": "Blade of Distant Light"
+    },
+    "left_hand_1": {
+      "id": 34090014,
+      "name": "Frenzied Flame Seal"
+    },
+    "head": {
+      "id": 651000,
+      "name": "Diallos's Mask"
+    },
+    "chest": {
+      "id": 5250100,
+      "name": "Horned Warrior Armor"
+    },
+    "arms": {
+      "id": 250200,
+      "name": "Nomadic Merchant Gloves"
+    },
+    "legs": {
+      "id": 250300,
+      "name": "Nomadic Merchant's Trousers"
+    },
+    "talisman_1": {
+      "id": 2023,
+      "name": "Coal of the Forge"
+    },
+    "talisman_2": {
+      "id": 2022,
+      "name": "Everburning Ember"
+    },
+    "talisman_3": {
+      "id": 3000,
+      "name": "Graven-School Talisman"
+    },
+    "talisman_4": {
+      "id": 9210,
+      "name": "Jewel of the Mindless"
+    }
+  },
+  "has_dlc": true,
+  "convergence": {
+    "convergence_detected": true,
+    "custom_items": {}
+  },
+  "overhaul_mod": {
+    "name": "Convergence",
+    "version": ""
+  },
+  "requires_mod": true,
+  "mod_info": {
+    "name": "Convergence",
+    "version": "",
+    "required": true
+  },
+  "author": "Hi Brite",
+  "submitted_by": "matte0644",
+  "screenshots": {
+    "face_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/face/character_021.jpg",
+    "body_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/body/character_021.jpg",
+    "preview_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/preview/character_021.jpg",
+    "thumbnail_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/thumbs/character_021.jpg"
+  }
+}
