@@ -1,0 +1,81 @@
+{
+  "name": "Mitchell",
+  "level": 125,
+  "class": "Wretch",
+  "body_type": "Type B",
+  "stats": {
+    "vigor": 45,
+    "mind": 10,
+    "endurance": 38,
+    "strength": 22,
+    "dexterity": 50,
+    "intelligence": 10,
+    "faith": 19,
+    "arcane": 10
+  },
+  "max_hp": 1581,
+  "max_fp": 78,
+  "max_stamina": 140,
+  "runes": 26,
+  "playtime_seconds": 171643,
+  "playtime": "47h 40m 43s",
+  "ng_level": "NG",
+  "bosses_defeated": 121,
+  "graces_unlocked": 222,
+  "ng_plus": 0,
+  "equipment": {
+    "right_hand_1": {
+      "id": 3560009,
+      "name": "Leontiel's Greatsword"
+    },
+    "right_hand_2": {
+      "id": 34000023,
+      "name": "Finger Seal"
+    },
+    "left_hand_1": {
+      "id": 31130000,
+      "name": "Brass Shield"
+    },
+    "head": {
+      "id": 1120000,
+      "name": "Jar"
+    },
+    "chest": {
+      "id": 470100,
+      "name": "Radahn's Lion Armor"
+    },
+    "arms": {
+      "id": 470200,
+      "name": "Radahn's Gauntlets"
+    },
+    "legs": {
+      "id": 470300,
+      "name": "Radahn's Greaves"
+    },
+    "talisman_1": {
+      "id": 2130,
+      "name": "Axe Talisman"
+    },
+    "talisman_2": {
+      "id": 3090,
+      "name": "Godfrey Icon"
+    },
+    "talisman_3": {
+      "id": 2060,
+      "name": "Spear Talisman"
+    },
+    "talisman_4": {
+      "id": 1210,
+      "name": "Bull-Goat's Talisman"
+    }
+  },
+  "has_dlc": true,
+  "author": "Zareoph",
+  "submitted_by": "darkfoxy7",
+  "screenshots": {
+    "face_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/face/character_022.png",
+    "body_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/body/character_022.png",
+    "preview_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/preview/character_022.jpg",
+    "thumbnail_url": "https://raw.githubusercontent.com/Hapfel1/er-character-library/main/screenshots/thumbs/character_022.png"
+  }
+}
