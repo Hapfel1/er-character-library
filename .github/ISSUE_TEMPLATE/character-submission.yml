@@ -79,7 +79,7 @@ body:
     attributes:
       label: Submission Agreement
       options:
-        - label: "I confirm this character was created by me and I agree to share it with the community"
+        - label: "I confirm this character was created by me and I agree to the submission terms in LICENSE (https://github.com/Hapfel1/er-character-library/blob/main/LICENSE)"
           required: true
         - label: "I confirm this character does not contain any inappropriate content"
           required: true
