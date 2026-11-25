@@ -15,7 +15,7 @@ jobs:
     steps:
       - name: Extract report info
         id: check_report
-        uses: actions/github-script@v7
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7.1.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -58,7 +58,7 @@ jobs:
 
       - name: Add report label
         if: steps.check_report.outputs.is_report == 'true'
-        uses: actions/github-script@v7
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7.1.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -74,14 +74,21 @@ jobs:
 
       - name: Create summary comment
         if: steps.check_report.outputs.is_report == 'true'
-        uses: actions/github-script@v7
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7.1.0
+        # Report text reaches the script only through env vars, never through
+        # expression substitution into the source.
+        env:
+          CHAR_NAME: ${{ steps.check_report.outputs.char_name }}
+          CHAR_ID: ${{ steps.check_report.outputs.char_id }}
+          REASON: ${{ steps.check_report.outputs.reason }}
+          REPORTER: ${{ steps.check_report.outputs.reporter }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const charName = '${{ steps.check_report.outputs.char_name }}';
-            const charId = '${{ steps.check_report.outputs.char_id }}';
-            const reason = '${{ steps.check_report.outputs.reason }}';
-            const reporter = '${{ steps.check_report.outputs.reporter }}';
+            const charName = process.env.CHAR_NAME;
+            const charId = process.env.CHAR_ID;
+            const reason = process.env.REASON;
+            const reporter = process.env.REPORTER;
             
             const comment = '## 📋 Report Summary\n\n' +
               '**Character:** ' + charName + ' (`' + charId + '`)\n' +
