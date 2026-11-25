@@ -15,7 +15,7 @@ jobs:
     steps:
       - name: Determine issue type
         id: issue_type
-        uses: actions/github-script@v7
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7.1.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -33,7 +33,7 @@ jobs:
       
       - name: Process submission
         if: steps.issue_type.outputs.is_submission == 'true'
-        uses: actions/github-script@v7
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7.1.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |

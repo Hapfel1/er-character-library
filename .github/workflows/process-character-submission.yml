@@ -6,7 +6,9 @@ on:
 
 jobs:
   process-submission:
-    if: contains(github.event.issue.labels.*.name, 'approved')
+    # Only the act of adding `approved` starts processing; adding any other
+    # label to an approved issue does not submit it a second time.
+    if: github.event.label.name == 'approved'
     runs-on: ubuntu-latest
     
     permissions:
@@ -16,13 +18,15 @@ jobs:
     
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
           fetch-depth: 0
+          # No token in .git/config: later steps handle untrusted archive content.
+          persist-credentials: false
       
       - name: Fetch issue details
         id: issue_details
-        uses: actions/github-script@v7
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7.1.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -53,7 +57,7 @@ jobs:
       
       - name: Get ZIP attachment URL
         id: find_zip
-        uses: actions/github-script@v7
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7.1.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -93,7 +97,7 @@ jobs:
       
       - name: Decline if no ZIP
         if: steps.find_zip.outputs.zip_found != 'true'
-        uses: actions/github-script@v7
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7.1.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -147,18 +151,24 @@ jobs:
       - name: Download and extract ZIP
         id: extract
         if: steps.find_zip.outputs.zip_found == 'true'
+        env:
+          ZIP_URL: ${{ steps.find_zip.outputs.zip_url }}
         run: |
-          curl -L "${{ steps.find_zip.outputs.zip_url }}" -o character.zip
-          
-          rm -rf character_package
-          mkdir -p character_package
-          cd character_package
-          unzip -oq ../character.zip
-          
+          PKG="$RUNNER_TEMP/character_package"
+          curl -fL --proto '=https' --max-filesize 52428800 "$ZIP_URL" -o "$RUNNER_TEMP/character.zip"
+
+          # Flat extraction outside the checkout; anything that is not a
+          # regular file (symlinks to runner files) is removed before use.
+          rm -rf "$PKG"
+          mkdir -p "$PKG"
+          unzip -oqj "$RUNNER_TEMP/character.zip" -d "$PKG"
+          find "$PKG" -mindepth 1 ! -type f -exec rm -rf {} +
+          rm -f "$RUNNER_TEMP/character.zip"
+
           echo "Extracted files:"
-          find . -type f
-          
-          ERC_FILE=$(find . -name "*.erc" -type f | head -1)
+          ls -la "$PKG"
+
+          ERC_FILE=$(find "$PKG" -maxdepth 1 -name "*.erc" -type f | head -1)
           if [ -z "$ERC_FILE" ]; then
             echo "ERROR: No .erc file found in ZIP"
             exit 1
@@ -172,7 +182,7 @@ jobs:
       # -----------------------------------------------------------------------
       - name: Acquire ID lock and assign character ID
         id: gen_id
-        uses: actions/github-script@v7
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7.1.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -338,54 +348,36 @@ jobs:
             // computeNextFreeId() will see it and future runs will skip it.
             // The lock is released in the "Release ID lock" step below.
       
+      - name: Setup Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: '3.12'
+
+      - name: Install Pillow
+        run: python -m pip install --disable-pip-version-check pillow==11.3.0
+
       - name: Validate and move files
+        env:
+          char_id: ${{ steps.gen_id.outputs.character_id }}
         run: |
-          char_id="${{ steps.gen_id.outputs.character_id }}"
-          
+          PKG="$RUNNER_TEMP/character_package"
           mkdir -p characters metadata screenshots/face screenshots/body screenshots/preview thumbnails
-          
-          ERC_SOURCE=$(find character_package -name "*.erc" -type f | head -1)
+
+          ERC_SOURCE=$(find "$PKG" -maxdepth 1 -name "*.erc" -type f | head -1)
           if [ ! -f "$ERC_SOURCE" ]; then
             echo "ERROR: .erc file not found"
             exit 1
           fi
+          if [ "$(stat -c %s "$ERC_SOURCE")" -gt 10485760 ]; then
+            echo "ERROR: .erc file larger than 10 MiB"
+            exit 1
+          fi
           cp "$ERC_SOURCE" "characters/${char_id}.erc"
           echo "✓ Copied .erc file"
-          
-          METADATA_SOURCE=$(find character_package -name "metadata.json" | head -1)
-          if [ -f "$METADATA_SOURCE" ]; then
-            cp "$METADATA_SOURCE" "metadata/${char_id}.json"
-            echo "✓ Copied metadata"
-          else
-            echo "⚠ No metadata.json found"
-          fi
-          
-          FACE_SOURCE=$(find character_package -name "face.*" | head -1)
-          if [ -f "$FACE_SOURCE" ]; then
-            FACE_EXT="${FACE_SOURCE##*.}"
-            FACE_EXT="${FACE_EXT,,}"
-            cp "$FACE_SOURCE" "screenshots/face/${char_id}.${FACE_EXT}"
-            echo "face_ext=${FACE_EXT}" >> $GITHUB_ENV
-            echo "✓ Copied face screenshot (.${FACE_EXT})"
-          fi
-          
-          BODY_SOURCE=$(find character_package -name "body.*" | head -1)
-          if [ -f "$BODY_SOURCE" ]; then
-            BODY_EXT="${BODY_SOURCE##*.}"
-            BODY_EXT="${BODY_EXT,,}"
-            cp "$BODY_SOURCE" "screenshots/body/${char_id}.${BODY_EXT}"
-            echo "body_ext=${BODY_EXT}" >> $GITHUB_ENV
-            echo "✓ Copied body screenshot (.${BODY_EXT})"
-          fi
-          
-          PREVIEW_SOURCE=$(find character_package -name "preview.*" | head -1)
-          if [ -f "$PREVIEW_SOURCE" ]; then
-            PREVIEW_EXT="${PREVIEW_SOURCE##*.}"
-            PREVIEW_EXT="${PREVIEW_EXT,,}"
-            cp "$PREVIEW_SOURCE" "screenshots/preview/${char_id}.${PREVIEW_EXT}"
-            echo "preview_ext=${PREVIEW_EXT}" >> $GITHUB_ENV
-            echo "✓ Copied preview screenshot (.${PREVIEW_EXT})"
-          fi
+
+          # Images are decoded and re-encoded: malformed files fail here and
+          # EXIF/metadata (GPS, device info) is dropped. Output is always JPEG.
+          python .github/scripts/sanitize_submission.py "$PKG" "$char_id"
       
       - name: Update metadata.json with author and screenshots
         env:
@@ -404,7 +396,7 @@ jobs:
       
       - name: Update index.json
         id: update_index
-        uses: actions/github-script@v7
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7.1.0
         env:
           char_id: ${{ steps.gen_id.outputs.character_id }}
           char_name: ${{ steps.issue_details.outputs.char_name }}
@@ -461,6 +453,8 @@ jobs:
             
             if (fs.existsSync(metadataPath)) {
               try {
+                // metadata.json was already reduced to known fields with
+                // fixed types and lengths by sanitize_submission.py.
                 const metadata = JSON.parse(fs.readFileSync(metadataPath, 'utf8'));
                 characterEntry = {
                   ...characterEntry,
@@ -491,7 +485,7 @@ jobs:
       
       - name: Create Pull Request
         id: cpr
-        uses: peter-evans/create-pull-request@v5
+        uses: peter-evans/create-pull-request@153407881ec5c347639a548ade7d8ad1d6740e38 # v5.0.2
         with:
           commit-message: |
             feat: add character ${{ steps.gen_id.outputs.character_id }} - ${{ steps.issue_details.outputs.char_name }}
@@ -519,7 +513,7 @@ jobs:
       # -----------------------------------------------------------------------
       - name: Release ID lock
         if: always() && steps.gen_id.outputs.lock_held == 'true'
-        uses: actions/github-script@v7
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7.1.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -536,13 +530,16 @@ jobs:
       
       - name: Comment on original issue
         if: steps.cpr.outputs.pull-request-number != ''
-        uses: actions/github-script@v7
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7.1.0
+        env:
+          PR_NUMBER: ${{ steps.cpr.outputs.pull-request-number }}
+          CHAR_ID: ${{ steps.gen_id.outputs.character_id }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const issueNumber = ${{ steps.issue_details.outputs.issue_number }};
-            const prNumber = ${{ steps.cpr.outputs.pull-request-number }};
-            const charId = '${{ steps.gen_id.outputs.character_id }}';
+            const issueNumber = context.payload.issue.number;
+            const prNumber = Number(process.env.PR_NUMBER);
+            const charId = process.env.CHAR_ID;
             
             const comment = '✅ **Submission Processed!**\n\n' +
               'Your character has been added to the library!\n\n' +
@@ -559,11 +556,14 @@ jobs:
       
       - name: Auto-merge for admins
         if: steps.cpr.outputs.pull-request-number != '' && github.event.issue.user.login == 'Hapfel1'
-        uses: actions/github-script@v7
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7.1.0
+        env:
+          PR_NUMBER: ${{ steps.cpr.outputs.pull-request-number }}
+          CHAR_ID: ${{ steps.gen_id.outputs.character_id }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const prNumber = ${{ steps.cpr.outputs.pull-request-number }};
+            const prNumber = Number(process.env.PR_NUMBER);
             
             try {
               await github.rest.pulls.merge({
@@ -571,7 +571,7 @@ jobs:
                 repo: context.repo.repo,
                 pull_number: prNumber,
                 merge_method: 'squash',
-                commit_title: 'Add character ${{ steps.gen_id.outputs.character_id }}'
+                commit_title: `Add character ${process.env.CHAR_ID}`
               });
               console.log('PR auto-merged');
             } catch (error) {
